@@ -1,3 +1,4 @@
 pathlib
 dataclasses
+pandas
 tkinter
