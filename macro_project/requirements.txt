@@ -1,4 +1,5 @@
 pathlib
 dataclasses
 pandas
+opencv-python
 tkinter
