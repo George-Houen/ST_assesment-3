@@ -3,6 +3,10 @@ import config
 
 
 root = tk.Tk()
+root.title("program")
+root.resizable(True, True)
+root.minsize(300, 400)
+root.state("normal")
 root.geometry("300x400")
 root.columnconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
