@@ -48,12 +48,17 @@ class App(tk.Tk):
         #body
         self.body.config()
 
+
+        self.page_file_manager = tk.Frame(self.body)
+        self.page_2 = tk.Frame(self.body)
+        self.page_3 = tk.Frame(self.body)
+
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
-        self.pages : dict[str, tk.Frame] = {
-            "file manager" : tk.Frame(self.body),
-            "page 2" : tk.Frame(self.body),
-            "page 3" : tk.Frame(self.body)
-        }
+        self.pages : list[tk.Frame] = [
+            self.page_file_manager,
+            self.page_2,
+            self.page_3
+        ]
 
 
 
