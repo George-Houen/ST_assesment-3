@@ -77,4 +77,4 @@ class App(tk.Tk):
         self.mainloop()
 
 if __name__ == "__main__":
-    App().mainloop
+    App().mainloop()
