@@ -5,9 +5,9 @@ import config
 root = tk.Tk()
 root.title("program")
 root.resizable(True, True)
-root.minsize(300, 400)
+root.minsize(500, 400)
 root.state("normal")
-root.geometry("300x400")
+root.geometry("500x400")
 root.columnconfigure(0, weight=1)
 root.rowconfigure(1, weight=1)
 
@@ -20,10 +20,17 @@ footer.grid(row=2, column=0, sticky="ew")
 
 #header
 header.config(relief="raised", border=2)
+header.columnconfigure(1, weight=1)
 
 tk.Label(header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
+nav_file_manager = tk.Button(header, text="manage files")
+nav_2 = tk.Button(header, text="EDA")
+nav_3 = tk.Button(header, text="prediction")
 
+nav_file_manager.grid(row=0, column=2)
+nav_2.grid(row=0, column=3)
+nav_3.grid(row=0, column=4, sticky="e")
 
 #footer 
 footer.config(relief="raised", border=2)
