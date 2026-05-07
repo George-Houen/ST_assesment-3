@@ -29,9 +29,9 @@ class App(tk.Tk):
 
         tk.Label(self.header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
-        self.nav_file_manager = tk.Button(self.header, text="manage files")
-        self.nav_2 = tk.Button(self.header, text="EDA")
-        self.nav_3 = tk.Button(self.header, text="prediction")
+        self.nav_file_manager = tk.Button(self.header, text="manage files", command=lambda:self.switch_active_page(self.page_file_manager))
+        self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_2))
+        self.nav_3 = tk.Button(self.header, text="prediction", command=lambda:self.switch_active_page(self.page_3))
 
         self.nav_file_manager.grid(row=0, column=2)
         self.nav_2.grid(row=0, column=3)
@@ -49,9 +49,9 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body)
-        self.page_2 = tk.Frame(self.body)
-        self.page_3 = tk.Frame(self.body)
+        self.page_file_manager = tk.Frame(self.body, background="green")
+        self.page_2 = tk.Frame(self.body, background="blue")
+        self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
@@ -59,6 +59,7 @@ class App(tk.Tk):
             self.page_2,
             self.page_3
         ]
+
 
 
 
@@ -71,10 +72,11 @@ class App(tk.Tk):
         if page in self.pages:
             page.pack()
             {i for i in self.pages if (i != page and i.pack_forget())}
+            print(f"opening page: {page}")
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
-        self.mainloop()
+
 
 if __name__ == "__main__":
     App().mainloop()
