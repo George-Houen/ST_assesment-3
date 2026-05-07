@@ -1,48 +1,56 @@
 import tkinter as tk
 import config
+from pathlib import Path
 
 
-root = tk.Tk()
-root.title("program")
-root.resizable(True, True)
-root.minsize(500, 400)
-root.state("normal")
-root.geometry("500x400")
-root.columnconfigure(0, weight=1)
-root.rowconfigure(1, weight=1)
+class App(tk.Tk):
+    """Desktop GUI app to interface with microinvertabrate tools"""
+    def __init__(self) -> None:
+        super().__init__()
 
-header = tk.Frame(root)
-header.grid(row=0, column=0, sticky="ew")
-body = tk.Frame(root)
-body.grid(row=1, column=0, sticky="ew")
-footer = tk.Frame(root)
-footer.grid(row=2, column=0, sticky="ew")
+        self.title("program")
+        self.resizable(True, True)
+        self.minsize(500, 400)
+        self.state("normal")
+        self.geometry("500x400")
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
 
-#header
-header.config(relief="raised", border=2)
-header.columnconfigure(1, weight=1)
+        header = tk.Frame(self)
+        header.grid(row=0, column=0, sticky="ew")
+        body = tk.Frame(self)
+        body.grid(row=1, column=0, sticky="ew")
+        footer = tk.Frame(self)
+        footer.grid(row=2, column=0, sticky="ew")
 
-tk.Label(header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
+        #header
+        header.config(relief="raised", border=2)
+        header.columnconfigure(1, weight=1)
 
-nav_file_manager = tk.Button(header, text="manage files")
-nav_2 = tk.Button(header, text="EDA")
-nav_3 = tk.Button(header, text="prediction")
+        tk.Label(header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
-nav_file_manager.grid(row=0, column=2)
-nav_2.grid(row=0, column=3)
-nav_3.grid(row=0, column=4, sticky="e")
+        nav_file_manager = tk.Button(header, text="manage files")
+        nav_2 = tk.Button(header, text="EDA")
+        nav_3 = tk.Button(header, text="prediction")
 
-#footer 
-footer.config(relief="raised", border=2)
-footer.columnconfigure(1, weight=1)
+        nav_file_manager.grid(row=0, column=2)
+        nav_2.grid(row=0, column=3)
+        nav_3.grid(row=0, column=4, sticky="e")
 
-tk.Label(footer, text="u3324971").grid(row=0, column=0)
-tk.Label(footer, text="uxxxxxxx").grid(row=1, column=0)
-tk.Button(footer, text="appendix").grid(row=0, column=1, sticky="e") # TODO: currently doesnt have any function to it
+        #footer 
+        footer.config(relief="raised", border=2)
+        footer.columnconfigure(1, weight=1)
 
-#body
-body.config()
+        tk.Label(footer, text="u3324971").grid(row=0, column=0)
+        tk.Label(footer, text="uxxxxxxx").grid(row=1, column=0)
+        tk.Button(footer, text="appendix").grid(row=0, column=1, sticky="e") # TODO: currently doesnt have any function to it
+
+        #body
+        body.config()
 
 
 
-root.mainloop()
+        self.mainloop()
+
+if __name__ == "__main__":
+    App().mainloop
