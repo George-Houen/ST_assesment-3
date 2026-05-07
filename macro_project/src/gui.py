@@ -62,19 +62,17 @@ class App(tk.Tk):
 
 
 
-    def switch_active_page(self, page: str) -> None:
+    def switch_active_page(self, page: tk.Frame) -> None:
         """changes which page is open in body
 
         Args:
-            page (str): which page to open (key in self.pages)
+            page (tk.Frame): which page to open (should be in pages list)
         """
-        try:
-            self.pages[page].pack()
-        except Exception as e:
-            print(f"An error ocured when trying to switch pages: {e}")
-            return
-
-        {k: v for k, v in self.pages.items() if (k != page and v.pack_forget())}
+        if page in self.pages:
+            page.pack()
+            {i for i in self.pages if (i != page and i.pack_forget())}
+        else:
+            raise ValueError("page to be opened should be in body and self.pages")
 
         self.mainloop()
 
