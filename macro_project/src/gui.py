@@ -59,6 +59,7 @@ class App(tk.Tk):
             self.page_2,
             self.page_3
         ]
+        self.switch_active_page(self.page_file_manager) #set as default
 
         tk.Label(self.page_file_manager, text="test").pack()
 
