@@ -16,39 +16,60 @@ class App(tk.Tk):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
-        header = tk.Frame(self)
-        header.grid(row=0, column=0, sticky="ew")
-        body = tk.Frame(self)
-        body.grid(row=1, column=0, sticky="ew")
-        footer = tk.Frame(self)
-        footer.grid(row=2, column=0, sticky="ew")
+        self.header = tk.Frame(self)
+        self.header.grid(row=0, column=0, sticky="ew")
+        self.body = tk.Frame(self)
+        self.body.grid(row=1, column=0, sticky="ew")
+        self.footer = tk.Frame(self)
+        self.footer.grid(row=2, column=0, sticky="ew")
 
         #header
-        header.config(relief="raised", border=2)
-        header.columnconfigure(1, weight=1)
+        self.header.config(relief="raised", border=2)
+        self.header.columnconfigure(1, weight=1)
 
-        tk.Label(header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
+        tk.Label(self.header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
-        nav_file_manager = tk.Button(header, text="manage files")
-        nav_2 = tk.Button(header, text="EDA")
-        nav_3 = tk.Button(header, text="prediction")
+        self.nav_file_manager = tk.Button(self.header, text="manage files")
+        self.nav_2 = tk.Button(self.header, text="EDA")
+        self.nav_3 = tk.Button(self.header, text="prediction")
 
-        nav_file_manager.grid(row=0, column=2)
-        nav_2.grid(row=0, column=3)
-        nav_3.grid(row=0, column=4, sticky="e")
+        self.nav_file_manager.grid(row=0, column=2)
+        self.nav_2.grid(row=0, column=3)
+        self.nav_3.grid(row=0, column=4, sticky="e")
 
         #footer 
-        footer.config(relief="raised", border=2)
-        footer.columnconfigure(1, weight=1)
+        self.footer.config(relief="raised", border=2)
+        self.footer.columnconfigure(1, weight=1)
 
-        tk.Label(footer, text="u3324971").grid(row=0, column=0)
-        tk.Label(footer, text="uxxxxxxx").grid(row=1, column=0)
-        tk.Button(footer, text="appendix").grid(row=0, column=1, sticky="e") # TODO: currently doesnt have any function to it
+        tk.Label(self.footer, text="u3324971").grid(row=0, column=0)
+        tk.Label(self.footer, text="uxxxxxxx").grid(row=1, column=0)
+        tk.Button(self.footer, text="appendix").grid(row=0, column=1, sticky="e") # TODO: currently doesnt have any function to it
 
         #body
-        body.config()
+        self.body.config()
+
+        #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
+        self.pages : dict[str, tk.Frame] = {
+            "file manager" : tk.Frame(self.body),
+            "page 2" : tk.Frame(self.body),
+            "page 3" : tk.Frame(self.body)
+        }
 
 
+
+    def switch_active_page(self, page: str) -> None:
+        """changes which page is open in body
+
+        Args:
+            page (str): which page to open (key in self.pages)
+        """
+        try:
+            self.pages[page].pack()
+        except Exception as e:
+            print(f"An error ocured when trying to switch pages: {e}")
+            return
+
+        {k: v for k, v in self.pages.items() if (k != page and v.pack_forget())}
 
         self.mainloop()
 
