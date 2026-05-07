@@ -17,11 +17,11 @@ class App(tk.Tk):
         self.rowconfigure(1, weight=1)
 
         self.header = tk.Frame(self)
-        self.header.grid(row=0, column=0, sticky="ew")
+        self.header.grid(row=0, column=0, sticky="nsew")
         self.body = tk.Frame(self)
-        self.body.grid(row=1, column=0, sticky="ew")
+        self.body.grid(row=1, column=0, sticky="nsew")
         self.footer = tk.Frame(self)
-        self.footer.grid(row=2, column=0, sticky="ew")
+        self.footer.grid(row=2, column=0, sticky="nsew")
 
         #header
         self.header.config(relief="raised", border=2)
@@ -49,8 +49,8 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body, background="green")
-        self.page_2 = tk.Frame(self.body, background="blue")
+        self.page_file_manager = tk.Frame(self.body, background="green", border=2)
+        self.page_2 = tk.Frame(self.body, bg="blue")
         self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
@@ -59,6 +59,8 @@ class App(tk.Tk):
             self.page_2,
             self.page_3
         ]
+
+        tk.Label(self.page_file_manager, text="test").pack()
 
 
 
@@ -70,9 +72,11 @@ class App(tk.Tk):
             page (tk.Frame): which page to open (should be in pages list)
         """
         if page in self.pages:
-            page.pack()
-            {i for i in self.pages if (i != page and i.pack_forget())}
+            for i in self.pages: 
+                i.pack_forget()
+                print("oops")
             print(f"opening page: {page}")
+            page.pack(fill="both", expand=True)
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
