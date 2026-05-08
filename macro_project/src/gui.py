@@ -68,11 +68,13 @@ class App(tk.Tk):
         #EDA page
 
         self.page_eda.configure()
-        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh")
+        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
         self.eda_refresh_button.grid(column=0, row=0)
         self.indexer = DatasetIndexer()
 
-        self.indexer_counter = tk.IntVar(value=0)
+        self.indexer_counter = tk.StringVar(value="dataset has not been indexed")
+        self.index_count_label = tk.Label(self.page_eda, textvariable=self.indexer_counter)
+        self.index_count_label.grid(column=1, row=0)
 
 
 
@@ -92,9 +94,10 @@ class App(tk.Tk):
             raise ValueError("page to be opened should be in body and self.pages")
 
     def run_eda(self):
+        print("start indexing")
         thread = Thread(
             target=lambda:self.indexer.build_dataframe(
-                lambda:self.after( 2, func = lambda:self.indexer_counter.set(self.indexer.counter)),
+                lambda:self.after( 2, func = lambda:self.indexer_counter.set(f"{self.indexer.counter} files indexed.")),
                 lambda: self.after( 2,
                     self.finished_indexing
                 )
@@ -104,6 +107,7 @@ class App(tk.Tk):
         pass
 
     def finished_indexing(self):
+        print("finished indexing")
         pass
 
 
