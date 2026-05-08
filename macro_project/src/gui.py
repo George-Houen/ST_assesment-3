@@ -71,7 +71,7 @@ class App(tk.Tk):
         #EDA page
 
         self.page_eda.configure()
-        self.page_eda.columnconfigure([0,1], weight=1)
+        self.page_eda.columnconfigure([0,1], weight=1, uniform="equal_cols")
         self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
         self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
@@ -91,9 +91,10 @@ class App(tk.Tk):
             child.destroy()
         i = 0
         for k,v in results.items():
-            tk.Label(self.summery_box, text=k).grid(row=0, column=i)
-            tk.Label(self.summery_box, text=v).grid(row=1, column=i)
+            tk.Label(self.summery_box, text=k).grid(row=i, column=0)
+            tk.Label(self.summery_box, text=round(v, 2)).grid(row=i, column=2)
             i+=1
+        tk.Frame(self.summery_box, border=1).grid(column=1, rowspan=i)
 
 
     def switch_active_page(self, page: tk.Frame) -> None:
