@@ -22,8 +22,8 @@ class EDAService:
     def save_image_size_distribution(self) -> None:         
         """Save width and height distribution charts."""
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))         
-        sns.histplot(self.dataframe["width"], bins=20, ax=axes[0])         
-        sns.histplot(self.dataframe["height"], bins=20, ax=axes[1])         
+        sns.histplot(self.dataframe["width"], bins=20, ax=axes[0]) #type: ignore    
+        sns.histplot(self.dataframe["height"], bins=20, ax=axes[1]) #type: ignore     
         axes[0].set_title("Image Width Distribution")         
         axes[1].set_title("Image Height Distribution")         
         plt.tight_layout()         
