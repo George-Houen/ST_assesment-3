@@ -3,6 +3,8 @@ import config
 from pathlib import Path
 from threading import * #type: ignore
 from services.dataset_indexer import DatasetIndexer
+from services.eda_service import EDAService
+from pandas import DataFrame
 
 
 class App(tk.Tk):
@@ -78,17 +80,19 @@ class App(tk.Tk):
         self.index_count_label = tk.Label(self.page_eda, textvariable=self.indexer_counter)
         self.index_count_label.grid(column=1, row=0, sticky="ew")
 
+        self.data_frame: DataFrame | None
+
         self.summery_box = tk.Frame(self.page_eda)
         self.summery_box.grid(column=0, columnspan=2, row=1, sticky="nesw")
         self.summery_box.columnconfigure([0,1,2,3], weight=1)
         
-    def display_eda_summery(self, results : dict[str, int]) -> None:
+    def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
             child.destroy()
         i = 0
-        for k,v in results:
+        for k,v in results.items():
             tk.Label(self.summery_box, text=k).grid(row=0, column=i)
-            tk.Label(self.summery_box, text=v).grid(row=0, column=i)
+            tk.Label(self.summery_box, text=v).grid(row=1, column=i)
             i+=1
 
 
@@ -122,7 +126,12 @@ class App(tk.Tk):
 
     def finished_indexing(self):
         print("finished indexing")
-        self.display_eda_summery()#keep going from here
+        self.data_frame = self.indexer.output
+        if type(self.data_frame) != DataFrame:
+            raise TypeError
+        self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
+        eda_summery = self.eda_service.build_summary()
+        self.display_eda_summery(eda_summery)#keep going from here
         pass
 
 

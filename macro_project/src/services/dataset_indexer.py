@@ -12,6 +12,7 @@ class DatasetIndexer:
     def __init__(self, data_dir: Path = RAW_DATA_DIR) -> None:
         self.data_dir = data_dir
         self.counter :int = 0
+        self.output: pd.DataFrame | None = None
     def build_dataframe(self, func = do_nothing, final = do_nothing) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
         records = []
@@ -40,4 +41,5 @@ class DatasetIndexer:
             )
             self.counter = len(records)
         final()
-        return pd.DataFrame(records)
+        self.output = pd.DataFrame(records)
+        return self.output
