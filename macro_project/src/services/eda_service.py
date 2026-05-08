@@ -8,6 +8,7 @@ class EDAService:
     def __init__(self, dataframe: pd.DataFrame, output_dir: Path) -> None:
         self.dataframe : pd.DataFrame = dataframe         
         self.output_dir = output_dir
+        print(output_dir)
     def save_class_distribution(self) -> None:         
         """Save a class-count chart for the dataset."""
         plt.figure(figsize=(12, 6))         
