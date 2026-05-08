@@ -30,7 +30,7 @@ class App(tk.Tk):
         tk.Label(self.header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
         self.nav_file_manager = tk.Button(self.header, text="manage files", command=lambda:self.switch_active_page(self.page_file_manager))
-        self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_2))
+        self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_eda))
         self.nav_3 = tk.Button(self.header, text="prediction", command=lambda:self.switch_active_page(self.page_3))
 
         self.nav_file_manager.grid(row=0, column=2)
@@ -50,20 +50,24 @@ class App(tk.Tk):
 
 
         self.page_file_manager = tk.Frame(self.body, background="green", border=2)
-        self.page_2 = tk.Frame(self.body, bg="blue")
+        self.page_eda = tk.Frame(self.body, bg="blue")
         self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
             self.page_file_manager,
-            self.page_2,
+            self.page_eda,
             self.page_3
         ]
         self.switch_active_page(self.page_file_manager) #set as default
 
         tk.Label(self.page_file_manager, text="test").pack()
 
+        #EDA page
 
+        self.page_eda.configure()
+        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh")
+        self.eda_refresh_button.grid(column=0, row=0)
 
 
     def switch_active_page(self, page: tk.Frame) -> None:
