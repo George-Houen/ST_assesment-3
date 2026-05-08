@@ -65,16 +65,26 @@ class App(tk.Tk):
 
         tk.Label(self.page_file_manager, text="test").pack()
 
+
         #EDA page
 
         self.page_eda.configure()
+        self.page_eda.columnconfigure([0,1], weight=1)
         self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
-        self.eda_refresh_button.grid(column=0, row=0)
+        self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
 
         self.indexer_counter = tk.StringVar(value="dataset has not been indexed")
         self.index_count_label = tk.Label(self.page_eda, textvariable=self.indexer_counter)
-        self.index_count_label.grid(column=1, row=0)
+        self.index_count_label.grid(column=1, row=0, sticky="ew")
+
+        self.summery_box = tk.Frame(self.page_eda)
+        self.summery_box.grid(column=0, columnspan=2, row=1, sticky="nesw")
+        self.summery_box.columnconfigure([0,1,2,3], weight=1)
+        tk.Label(self.summery_box, text="total images", bd=).grid(row = 0, column=0)
+        tk.Label(self.summery_box, text="total classes").grid(row = 0, column=1)
+        tk.Label(self.summery_box, text="mean width").grid(row = 0, column=2)
+        tk.Label(self.summery_box, text="mean height").grid(row = 0, column=3)
 
 
 
