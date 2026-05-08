@@ -94,15 +94,16 @@ class App(tk.Tk):
     def run_eda(self):
         thread = Thread(
             target=lambda:self.indexer.build_dataframe(
-                lambda:self.after( 2,
-                    func = lambda:self.indexer_counter.set(self.indexer.counter)
-                ),
+                lambda:self.after( 2, func = lambda:self.indexer_counter.set(self.indexer.counter)),
                 lambda: self.after( 2,
-                    func = lambda:self
+                    self.finished_indexing
                 )
             )
         )
         thread.start()
+        pass
+
+    def finished_indexing(self):
         pass
 
 
