@@ -81,11 +81,15 @@ class App(tk.Tk):
         self.summery_box = tk.Frame(self.page_eda)
         self.summery_box.grid(column=0, columnspan=2, row=1, sticky="nesw")
         self.summery_box.columnconfigure([0,1,2,3], weight=1)
-        tk.Label(self.summery_box, text="total images", bd=).grid(row = 0, column=0)
-        tk.Label(self.summery_box, text="total classes").grid(row = 0, column=1)
-        tk.Label(self.summery_box, text="mean width").grid(row = 0, column=2)
-        tk.Label(self.summery_box, text="mean height").grid(row = 0, column=3)
-
+        
+    def display_eda_summery(self, results : dict[str, int]) -> None:
+        for child in self.summery_box.winfo_children():
+            child.destroy()
+        i = 0
+        for k,v in results:
+            tk.Label(self.summery_box, text=k).grid(row=0, column=i)
+            tk.Label(self.summery_box, text=v).grid(row=0, column=i)
+            i+=1
 
 
     def switch_active_page(self, page: tk.Frame) -> None:
@@ -118,6 +122,7 @@ class App(tk.Tk):
 
     def finished_indexing(self):
         print("finished indexing")
+        self.display_eda_summery()#keep going from here
         pass
 
 
