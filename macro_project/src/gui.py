@@ -1,6 +1,8 @@
 import tkinter as tk
 import config
 from pathlib import Path
+from threading import * #type: ignore
+from services.dataset_indexer import DatasetIndexer
 
 
 class App(tk.Tk):
@@ -68,6 +70,10 @@ class App(tk.Tk):
         self.page_eda.configure()
         self.eda_refresh_button = tk.Button(self.page_eda, text="refresh")
         self.eda_refresh_button.grid(column=0, row=0)
+        self.indexer = DatasetIndexer()
+
+        self.indexer_counter = tk.IntVar(value=0)
+
 
 
     def switch_active_page(self, page: tk.Frame) -> None:
@@ -85,6 +91,19 @@ class App(tk.Tk):
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
+    def run_eda(self):
+        thread = Thread(
+            target=lambda:self.indexer.build_dataframe(
+                lambda:self.after( 2,
+                    func = lambda:self.indexer_counter.set(self.indexer.counter)
+                ),
+                lambda: self.after( 2,
+                    func = lambda:self
+                )
+            )
+        )
+        thread.start()
+        pass
 
 
 if __name__ == "__main__":

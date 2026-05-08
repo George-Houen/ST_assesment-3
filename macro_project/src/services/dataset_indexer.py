@@ -4,14 +4,20 @@ import pandas as pd
 
 from config import RAW_DATA_DIR, SUPPORTED_EXTENSIONS
 
+def do_nothing(*args, **kwargs):
+    pass
+
 class DatasetIndexer:
     """Scan the dataset folder and build a tabular image index."""
     def __init__(self, data_dir: Path = RAW_DATA_DIR) -> None:
         self.data_dir = data_dir
-    def build_dataframe(self) -> pd.DataFrame:
+        self.counter :int = 0
+    def build_dataframe(self, func = do_nothing, final = do_nothing) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
         records = []
+
         for file_path in self.data_dir.rglob("*"):
+            func()
             if file_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
                 continue
             
@@ -32,4 +38,6 @@ class DatasetIndexer:
                     "channels": channels,
                 }
             )
+            self.counter = len(records)
+        final()
         return pd.DataFrame(records)
