@@ -94,7 +94,7 @@ class App(tk.Tk):
             tk.Label(self.summery_box, text=k).grid(row=i, column=0)
             tk.Label(self.summery_box, text=round(v, 2)).grid(row=i, column=2)
             i+=1
-        tk.Frame( 
+        tk.Frame( #vertical culumn serperator
                 self.summery_box,
                 width=1,
                 bg="black"
