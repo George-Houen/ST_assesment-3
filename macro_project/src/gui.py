@@ -72,6 +72,7 @@ class App(tk.Tk):
 
         self.page_eda.configure()
         self.page_eda.columnconfigure([0,1], weight=1, uniform="equal_cols")
+        self.page_eda.rowconfigure(1, minsize=3)
         self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
         self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
@@ -83,8 +84,8 @@ class App(tk.Tk):
         self.data_frame: DataFrame | None
 
         self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
-        self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3)
-        self.summery_box.columnconfigure([0,1,2,3], weight=1)
+        self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
+        self.summery_box.columnconfigure([0,1], weight=1)
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
