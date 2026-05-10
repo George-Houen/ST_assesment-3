@@ -88,8 +88,8 @@ class App(tk.Tk):
         self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
 
-        self.eda_class_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 2)
-        self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 1, row = 2)
+        self.eda_class_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 2, sticky = "e")
+        self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 1, row = 2, sticky ="w")
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
@@ -141,7 +141,7 @@ class App(tk.Tk):
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
-        EDA_IMAGE_SIZE = (100, 100)
+        EDA_IMAGE_SIZE = (250, 250)
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), EDA_IMAGE_SIZE)
         self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), EDA_IMAGE_SIZE)
         pass
