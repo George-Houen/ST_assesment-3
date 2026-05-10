@@ -94,8 +94,11 @@ class App(tk.Tk):
             tk.Label(self.summery_box, text=k).grid(row=i, column=0)
             tk.Label(self.summery_box, text=round(v, 2)).grid(row=i, column=2)
             i+=1
-        tk.Frame(self.summery_box, border=1).grid(column=1, rowspan=i)
-
+        tk.Frame( 
+                self.summery_box,
+                width=1,
+                bg="black"
+            ).grid(row=0, column=1, rowspan=i, sticky="ns", padx=5)
 
     def switch_active_page(self, page: tk.Frame) -> None:
         """changes which page is open in body
