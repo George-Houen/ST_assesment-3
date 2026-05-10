@@ -82,8 +82,8 @@ class App(tk.Tk):
 
         self.data_frame: DataFrame | None
 
-        self.summery_box = tk.Frame(self.page_eda)
-        self.summery_box.grid(column=0, columnspan=2, row=1, sticky="nesw")
+        self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
+        self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3)
         self.summery_box.columnconfigure([0,1,2,3], weight=1)
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
