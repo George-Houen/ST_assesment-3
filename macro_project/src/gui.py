@@ -5,7 +5,7 @@ from threading import * #type: ignore
 from services.dataset_indexer import DatasetIndexer
 from services.eda_service import EDAService
 from pandas import DataFrame
-from gui_components import ImageLabel
+from gui_components import ImageLabel, DropDown
 
 
 class App(tk.Tk):
@@ -55,7 +55,7 @@ class App(tk.Tk):
 
 
         self.page_file_manager = tk.Frame(self.body, background="green", border=2)
-        self.page_eda = tk.Frame(self.body)
+        self.page_eda = tk.Frame(self.body, background="orange")
         self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
@@ -88,7 +88,9 @@ class App(tk.Tk):
         self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
 
-        self.eda_class_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 2, sticky = "e")
+        self.testing_drop_down = DropDown(self.page_eda,"drop down").cont_grid(column = 0, row = 2, sticky = "ew")
+
+        self.eda_class_distrobution_image = ImageLabel(self.testing_drop_down).grid(column = 0, row = 0, sticky = "nsew")
         self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 3, sticky ="w")
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
