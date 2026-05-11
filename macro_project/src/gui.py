@@ -89,7 +89,7 @@ class App(tk.Tk):
         self.summery_box.columnconfigure([0,1], weight=1)
 
         self.eda_class_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 2, sticky = "e")
-        self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 1, row = 2, sticky ="w")
+        self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 3, sticky ="w")
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
