@@ -27,7 +27,9 @@ class ImageLabel(Label):
             self.image_data = self.root_image_data.resize(size, Image.Resampling.LANCZOS)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render)
+        """ removing cos it is so freaking broken
         self.bind("<Configure>", self.auto_resize)
+        """
 
     def auto_resize(self, event):
         self.resize((event.width, event.height))
