@@ -88,7 +88,7 @@ class App(tk.Tk):
         self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
 
-        self.testing_drop_down = DropDown(self.page_eda,"drop down").cont_grid(column = 0, row = 2, sticky = "ew")
+        self.testing_drop_down = DropDown(self.page_eda,"drop down").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
 
         self.eda_class_distrobution_image = ImageLabel(self.testing_drop_down).grid(column = 0, row = 0, sticky = "nsew")
         self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 3, sticky ="w")
@@ -143,7 +143,7 @@ class App(tk.Tk):
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
-        EDA_IMAGE_SIZE = (250, 250)
+        EDA_IMAGE_SIZE = (1000, 1000)
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), EDA_IMAGE_SIZE)
         self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), EDA_IMAGE_SIZE)
         pass
