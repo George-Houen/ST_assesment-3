@@ -1,4 +1,4 @@
-from tkinter import Label
+from tkinter import Label, Button, Frame
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -23,3 +23,27 @@ class ImageLabel(Label):
             self.image_data = self.image_data.resize(size, Image.Resampling.LANCZOS)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render)
+
+
+class DropDown(Frame):
+    def __init__(self, root, text="drop down", *args, **kwargs):
+        self.container = Frame(root)
+        self.container.columnconfigure(1, weight=1)
+        self.container.rowconfigure(1, minsize=10)
+        Frame.__init__(master = self.container, *args, **kwargs)
+        self.header = Button(self.container, text=text)
+        self.header.grid(row=0, column=0)
+        self.state_expanded : bool = False
+    def open(self):
+        Frame.grid(self, row=1, column=0, sticky="nsew")
+    def close(self):
+        Frame.grid_forget(self)
+    def grid(self, *args, **kwargs):
+        self.container.grid(*args, **kwargs)
+    def grid_forget(self, *args, **kwargs):
+        self.container.grid_forget(*args, **kwargs)
+    def header_press(self):
+        if self.state_expanded:
+            self.open()
+        else:
+            self.close()
