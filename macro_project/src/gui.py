@@ -144,8 +144,8 @@ class App(tk.Tk):
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
-        EDA_IMAGE_SIZE = (1000, 1000)
-        self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), EDA_IMAGE_SIZE)
+        EDA_IMAGE_SIZE = {"width": 500, "height": None}
+        self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
         #self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), EDA_IMAGE_SIZE)
         pass
 

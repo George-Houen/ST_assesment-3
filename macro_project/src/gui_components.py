@@ -17,28 +17,37 @@ class ImageLabel(Label):
     def grid(self, *args, **kwargs) -> Self:
         super().grid(sticky="nsew", *args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
-    def set_image(self, image: Path, size :tuple [int, int]|None = None ):
+    def set_image(self, image: Path, height: int | None = None, width: int | None = None):
         #image_data and image_render are used from pillow to help for all image types
         #currently all images should be png, but its future proofing
         self.root_image_data = Image.open(image)
         self.image_data = self.root_image_data.copy()
 
-        if size:
-            self.image_data = self.root_image_data.resize(size, Image.Resampling.LANCZOS)
+        self.resize(height= height, width= width)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render)
         """ removing cos it is so freaking broken
         self.bind("<Configure>", self.auto_resize)
         """
 
+
     def auto_resize(self, event):
-        self.resize((event.width, event.height))
+        self.resize(event.width, event.height)
         print(event.width, event.height)
         
     
-    def resize(self, size :tuple [int, int]):
+    def resize(self, height: int | None = None, width: int | None = None):
         if self.root_image_data:
-            self.image_data = self.root_image_data.resize(size, Image.Resampling.LANCZOS)
+            w_over_h_ratio = self.root_image_data.width / self.root_image_data.height
+            if width and height:
+                self.image_data = self.root_image_data.resize((width, height), Image.Resampling.LANCZOS)
+            elif width:
+                self.image_data = self.root_image_data.resize((width, round(w_over_h_ratio*width)), Image.Resampling.LANCZOS)
+            elif height:
+                self.image_data = self.root_image_data.resize((round(w_over_h_ratio/height), height), Image.Resampling.LANCZOS)
+            else:
+                self.image_data = self.root_image_data.copy()
+
             self.image_render = ImageTk.PhotoImage(self.image_data)
             self.configure(image=self.image_render) # i dont know if this has to be done, but just to be safe
             
