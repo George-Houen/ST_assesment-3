@@ -10,17 +10,21 @@ class ImageLabel(Label):
         super().__init__(*args, **kwargs)
 
         #prevents garbage collection fucking up the whole thing:
+        self.root_image_data = None
         self.image_data = None
         self.image_render = None
+        self.grid_propagate(False)
     def grid(self, *args, **kwargs) -> Self:
-        super().grid(*args, **kwargs)
+        super().grid(sticky="nsew", *args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
     def set_image(self, image: Path, size :tuple [int, int]|None = None ):
         #image_data and image_render are used from pillow to help for all image types
         #currently all images should be png, but its future proofing
-        self.image_data = Image.open(image) 
+        self.root_image_data = Image.open(image)
+        self.image_data = self.root_image_data.copy()
+
         if size:
-            self.image_data = self.image_data.resize(size, Image.Resampling.LANCZOS)
+            self.image_data = self.root_image_data.resize(size, Image.Resampling.LANCZOS)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render)
         self.bind("<Configure>", self.auto_resize)
@@ -31,10 +35,11 @@ class ImageLabel(Label):
         
     
     def resize(self, size :tuple [int, int]):
-        if self.image_data:
-            self.image_data = self.image_data.resize(size, Image.Resampling.LANCZOS)
+        if self.root_image_data:
+            self.image_data = self.root_image_data.resize(size, Image.Resampling.LANCZOS)
             self.image_render = ImageTk.PhotoImage(self.image_data)
-            #self.configure(image=self.image_render) # i dont know if this has to be done, but just to be safe
+            self.configure(image=self.image_render) # i dont know if this has to be done, but just to be safe
+            
 
 
 
