@@ -23,6 +23,19 @@ class ImageLabel(Label):
             self.image_data = self.image_data.resize(size, Image.Resampling.LANCZOS)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render)
+        self.bind("<Configure>", self.auto_resize)
+
+    def auto_resize(self, event):
+        self.resize((event.width, event.height))
+        print(event.width, event.height)
+        
+    
+    def resize(self, size :tuple [int, int]):
+        if self.image_data:
+            self.image_data = self.image_data.resize(size, Image.Resampling.LANCZOS)
+            self.image_render = ImageTk.PhotoImage(self.image_data)
+            #self.configure(image=self.image_render) # i dont know if this has to be done, but just to be safe
+
 
 
 class DropDown(Frame):
