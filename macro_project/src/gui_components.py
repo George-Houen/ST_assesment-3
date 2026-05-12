@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
 from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR
+from shutil import copy
 
 class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
@@ -91,12 +92,17 @@ def upload_file():
     file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
     if file_path:
         print(f"Selected file: {file_path}")
+    return file_path
 
 class FileChoiceButton(Button):
     def __init__(self, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.config(text="upload file")
-        self.config(command=upload_file)
+        self.config(command=self.onlick)
+        self.selected_file = None
+    def onlick(self):
+        self.selection_file = upload_file()
+
 
 class FolderSelect(OptionMenu):
     def __init__(self, root, *args, **kwargs):
@@ -105,10 +111,17 @@ class FolderSelect(OptionMenu):
         self.current_value = StringVar(self)
         self.current_value.set(self.folders[0])
         super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
-        
-        
-
 
     def find_folders(self):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         self.folders = [f.name for f in path.iterdir() if f.is_dir()]
+
+class move_file_button(Button):
+    def __init__(self, file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.config(command=self.onclick)
+        self.file_choice = file_choice
+        self.folder_select = folder_select
+    def onclick(self):
+        if self.file_choice.selected_file:
+            copy(self.file_choice.selected_file, self.folder_select.current_value.get())
