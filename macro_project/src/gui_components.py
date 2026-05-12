@@ -2,6 +2,7 @@ from tkinter import Label, Button, Frame
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
+from math import ceil
 
 class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
@@ -42,9 +43,10 @@ class ImageLabel(Label):
             if width and height:
                 self.image_data = self.root_image_data.resize((width, height), Image.Resampling.LANCZOS)
             elif width:
-                self.image_data = self.root_image_data.resize((width, round(w_over_h_ratio*width)), Image.Resampling.LANCZOS)
+                print(width, ceil(w_over_h_ratio/width), w_over_h_ratio)
+                self.image_data = self.root_image_data.resize((width, ceil(width/w_over_h_ratio)), Image.Resampling.LANCZOS)
             elif height:
-                self.image_data = self.root_image_data.resize((round(w_over_h_ratio/height), height), Image.Resampling.LANCZOS)
+                self.image_data = self.root_image_data.resize((ceil(w_over_h_ratio*height), height), Image.Resampling.LANCZOS)
             else:
                 self.image_data = self.root_image_data.copy()
 
