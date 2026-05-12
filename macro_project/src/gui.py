@@ -99,6 +99,7 @@ class App(tk.Tk):
         self.file_select = FileChoiceButton(self.page_file_manager).grid(row=1)
         self.folder_select = FolderSelect(self.page_file_manager).grid(row=2)
         self.move_file_button = MoveFileButton(self.page_file_manager, self.file_select, self.folder_select).grid(row=3)
+        self.select_image = ImageLabel(self.page_file_manager).grid(row=1, rowspan=3, column = 1)
 
 
     def display_eda_summery(self, results : dict[str, float]) -> None:
