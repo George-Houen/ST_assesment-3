@@ -16,7 +16,7 @@ class ImageLabel(Label):
         self.image_render = None
         self.grid_propagate(False)
     def grid(self, *args, **kwargs) -> Self:
-        super().grid(sticky="nsew", *args, **kwargs)
+        super().grid(*args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
     def set_image(self, image: Path, height: int | None = None, width: int | None = None):
         #image_data and image_render are used from pillow to help for all image types
