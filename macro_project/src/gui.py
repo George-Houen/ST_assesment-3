@@ -54,7 +54,7 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body, background="green", border=2)
+        self.page_file_manager = tk.Frame(self.body, border=2)
         self.page_eda = tk.Frame(self.body)
         self.page_3 = tk.Frame(self.body, background="red")
 
