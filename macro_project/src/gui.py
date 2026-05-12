@@ -55,7 +55,7 @@ class App(tk.Tk):
 
 
         self.page_file_manager = tk.Frame(self.body, background="green", border=2)
-        self.page_eda = tk.Frame(self.body, background="orange")
+        self.page_eda = tk.Frame(self.body)
         self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
@@ -88,10 +88,11 @@ class App(tk.Tk):
         self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
 
-        self.testing_drop_down = DropDown(self.page_eda,"drop down").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
+        self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
+        self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
 
-        self.eda_class_distrobution_image = ImageLabel(self.testing_drop_down).grid(column = 0, row = 0, sticky="")
-        #self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 3)
+        self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="")
+        self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="")
         
     def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
@@ -145,7 +146,7 @@ class App(tk.Tk):
         self.display_eda_summery(eda_summery)
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
-        #self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), EDA_IMAGE_SIZE)
+        self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
         pass
 
 

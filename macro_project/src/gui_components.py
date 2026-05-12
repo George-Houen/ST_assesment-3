@@ -58,10 +58,12 @@ class ImageLabel(Label):
 
 class DropDown(Frame):
     def __init__(self, root, text="drop down", *args, **kwargs):
-        self.container = Frame(root, background= "teal")
+        self.container = Frame(root)
         self.container.columnconfigure(0, weight=1)
         self.container.rowconfigure(1, minsize=10)
         super().__init__(master = self.container, *args, **kwargs)
+        self.config(background="grey")
+        self.columnconfigure(0, weight=0)
         self.header = Button(self.container, text=text, command=self.header_press, background="yellow")
         self.header.grid(row=0, column=0, sticky="nsew")
         self.state_expanded : bool = False
