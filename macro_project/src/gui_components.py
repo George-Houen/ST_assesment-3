@@ -1,8 +1,9 @@
-from tkinter import Label, Button, Frame
+from tkinter import Label, Button, Frame, filedialog, OptionMenu
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
+from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR
 
 class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
@@ -84,3 +85,24 @@ class DropDown(Frame):
         else:
             self.close()
             self.state_expanded = False
+
+def upload_file():
+    # Opens a file dialog and returns the selected file's path
+    file_path = filedialog.askopenfilename(filetypes=SUPPORTED_EXTENSIONS)
+    if file_path:
+        print(f"Selected file: {file_path}")
+
+class FileChoiceButton(Button):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.config(text="upload file")
+        self.config(command=upload_file)
+
+class FolderSelect(OptionMenu):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.folders = []
+
+    def find_folders(self):
+        path = RAW_DATA_DIR/"stream_macroinvertebrates"
+        self.folders = [f.name for f in path.iterdir() if f.is_dir()]
