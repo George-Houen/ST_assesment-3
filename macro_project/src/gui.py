@@ -17,7 +17,7 @@ class App(tk.Tk):
         self.resizable(True, True)
         self.minsize(500, 400)
         self.state("normal")
-        self.geometry("500x400")
+        self.geometry("500x500")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
