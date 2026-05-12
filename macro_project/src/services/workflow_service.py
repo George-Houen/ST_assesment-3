@@ -60,6 +60,7 @@ class WorkflowService:
         model_path = MODEL_OUTPUT_DIR / "macro_classifier.joblib"
         if model_path.exists():
             self.classifier.model = joblib.load(model_path)
+        
         features = self.preprocessor.transform(file_path).reshape(1, -1)
         prediction = self.classifier.model.predict(features)[0]
         print(f"Predicted class: {prediction}")
