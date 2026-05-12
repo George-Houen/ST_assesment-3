@@ -112,7 +112,7 @@ class FolderSelect(OptionMenu):
     def __init__(self, root, *args, **kwargs):
         self.folders = []
         self.find_folders()
-        self.current_value = StringVar(self)
+        self.current_value = StringVar(root)
         self.current_value.set(self.folders[0])
         super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
 
