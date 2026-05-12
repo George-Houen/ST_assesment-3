@@ -2,4 +2,6 @@ pathlib
 dataclasses
 pandas
 opencv-python
+matplotlib
+seaborn
 tkinter
