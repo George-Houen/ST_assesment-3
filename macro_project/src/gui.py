@@ -89,7 +89,6 @@ class App(tk.Tk):
         self.summery_box.columnconfigure([0,1], weight=1)
 
         self.testing_drop_down = DropDown(self.page_eda,"drop down").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
-        self.testing_drop_down.grid_propagate(False)
 
         self.eda_class_distrobution_image = ImageLabel(self.testing_drop_down).grid(column = 0, row = 0)
         #self.eda_size_distrobution_image = ImageLabel(self.page_eda).grid(column = 0, row = 3)
