@@ -1,8 +1,10 @@
-from tkinter import Label, Button, Frame
+from tkinter import Label, Button, Frame, filedialog, OptionMenu, StringVar
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
+from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR
+from shutil import copy
 
 class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
@@ -84,3 +86,55 @@ class DropDown(Frame):
         else:
             self.close()
             self.state_expanded = False
+
+def upload_file():
+    # Opens a file dialog and returns the selected file's path
+    file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
+    if file_path:
+        print(f"Selected file: {file_path}")
+    return file_path
+
+class FileChoiceButton(Button):
+    def __init__(self, root, *args, **kwargs):
+        super().__init__(root, *args, **kwargs)
+        self.config(text="upload file")
+        self.config(command=self.onlick)
+        self.selected_file = None
+    def onlick(self):
+        self.selected_file = upload_file()
+    
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self
+
+
+class FolderSelect(OptionMenu):
+    def __init__(self, root, *args, **kwargs):
+        self.folders = []
+        self.find_folders()
+        self.current_value = StringVar(root)
+        self.current_value.set(self.folders[0])
+        super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
+
+    def find_folders(self):
+        path = RAW_DATA_DIR/"stream_macroinvertebrates"
+        self.folders = [f.name for f in path.iterdir() if f.is_dir()]
+
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self
+
+class MoveFileButton(Button):
+    def __init__(self,root,  file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
+        super().__init__(root, *args, **kwargs)
+        self.config(command=self.onclick, text="upload")
+        self.file_choice = file_choice
+        self.folder_select = folder_select
+    def onclick(self):
+        if self.file_choice.selected_file:
+            copy(self.file_choice.selected_file, RAW_DATA_DIR/"stream_macroinvertebrates"/self.folder_select.current_value.get())
+            print(self.folder_select.current_value.get())
+        print("test 2")
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self

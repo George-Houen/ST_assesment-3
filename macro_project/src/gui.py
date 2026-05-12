@@ -5,7 +5,7 @@ from threading import * #type: ignore
 from services.dataset_indexer import DatasetIndexer
 from services.eda_service import EDAService
 from pandas import DataFrame
-from gui_components import ImageLabel, DropDown
+from gui_components import *
 
 
 class App(tk.Tk):
@@ -54,7 +54,7 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body, background="green", border=2)
+        self.page_file_manager = tk.Frame(self.body, border=2)
         self.page_eda = tk.Frame(self.body)
         self.page_3 = tk.Frame(self.body, background="red")
 
@@ -65,8 +65,6 @@ class App(tk.Tk):
             self.page_3
         ]
         self.switch_active_page(self.page_file_manager) #set as default
-
-        tk.Label(self.page_file_manager, text="test").pack()
 
 
         #EDA page
@@ -93,7 +91,16 @@ class App(tk.Tk):
 
         self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="")
         self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="")
-        
+
+
+        #file control page
+
+        self.page_file_manager.config()
+        self.file_select = FileChoiceButton(self.page_file_manager).grid(row=1)
+        self.folder_select = FolderSelect(self.page_file_manager).grid(row=2)
+        self.move_file_button = MoveFileButton(self.page_file_manager, self.file_select, self.folder_select).grid(row=3)
+
+
     def display_eda_summery(self, results : dict[str, float]) -> None:
         for child in self.summery_box.winfo_children():
             child.destroy()
