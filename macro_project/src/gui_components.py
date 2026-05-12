@@ -95,16 +95,16 @@ def upload_file():
     return file_path
 
 class FileChoiceButton(Button):
-    def __init__(self, root, additional_command = None, *args, **kwargs):
+    def __init__(self, root, after_command = None, *args, **kwargs):
         super().__init__(root, *args, **kwargs)
         self.config(text="upload file")
         self.config(command=self.onlick)
         self.selected_file = None
-        self.additional_command = additional_command
+        self.after_command = after_command
     def onlick(self):
         self.selected_file = upload_file()
-        if self.additional_command:
-            self.additional_command()
+        if self.after_command:
+            self.after_command()
     
     def grid(self, **kwargs) -> Self:
         super().grid(**kwargs)

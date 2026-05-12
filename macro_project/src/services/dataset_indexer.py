@@ -10,13 +10,12 @@ class DatasetIndexer:
         self.data_dir = data_dir
         self.counter :int = 0
         self.output: pd.DataFrame | None = None
-    def build_dataframe(self, func = None, final = do_nothing) -> pd.DataFrame:
+    def build_dataframe(self, func = None, final = None) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
         records = []
 
         for file_path in self.data_dir.rglob("*"):
-            if func:
-                func()
+            if func: func()
             if file_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
                 continue
             
@@ -38,6 +37,6 @@ class DatasetIndexer:
                 }
             )
             self.counter = len(records)
-        final()
+        if final:final()
         self.output = pd.DataFrame(records)
         return self.output
