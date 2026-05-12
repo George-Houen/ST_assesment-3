@@ -127,7 +127,7 @@ class FolderSelect(OptionMenu):
 class MoveFileButton(Button):
     def __init__(self,root,  file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
         super().__init__(root, *args, **kwargs)
-        self.config(command=self.onclick)
+        self.config(command=self.onclick, text="upload")
         self.file_choice = file_choice
         self.folder_select = folder_select
     def onclick(self):
