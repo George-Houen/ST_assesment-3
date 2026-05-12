@@ -1,4 +1,4 @@
-from tkinter import Label, Button, Frame, filedialog, OptionMenu
+from tkinter import Label, Button, Frame, filedialog, OptionMenu, StringVar
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -88,7 +88,7 @@ class DropDown(Frame):
 
 def upload_file():
     # Opens a file dialog and returns the selected file's path
-    file_path = filedialog.askopenfilename(filetypes=SUPPORTED_EXTENSIONS)
+    file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
     if file_path:
         print(f"Selected file: {file_path}")
 
@@ -99,9 +99,15 @@ class FileChoiceButton(Button):
         self.config(command=upload_file)
 
 class FolderSelect(OptionMenu):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+    def __init__(self, root, *args, **kwargs):
         self.folders = []
+        self.find_folders()
+        self.current_value = StringVar(self)
+        self.current_value.set(self.folders[0])
+        super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
+        
+        
+
 
     def find_folders(self):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
