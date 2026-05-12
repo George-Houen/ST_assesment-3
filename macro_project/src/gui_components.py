@@ -95,13 +95,17 @@ def upload_file():
     return file_path
 
 class FileChoiceButton(Button):
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+    def __init__(self, root, *args, **kwargs):
+        super().__init__(root, *args, **kwargs)
         self.config(text="upload file")
         self.config(command=self.onlick)
         self.selected_file = None
     def onlick(self):
         self.selection_file = upload_file()
+    
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self
 
 
 class FolderSelect(OptionMenu):
@@ -116,12 +120,19 @@ class FolderSelect(OptionMenu):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         self.folders = [f.name for f in path.iterdir() if f.is_dir()]
 
-class move_file_button(Button):
-    def __init__(self, file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self
+
+class MoveFileButton(Button):
+    def __init__(self,root,  file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
+        super().__init__(root, *args, **kwargs)
         self.config(command=self.onclick)
         self.file_choice = file_choice
         self.folder_select = folder_select
     def onclick(self):
         if self.file_choice.selected_file:
             copy(self.file_choice.selected_file, self.folder_select.current_value.get())
+    def grid(self, **kwargs) -> Self:
+        super().grid(**kwargs)
+        return self
