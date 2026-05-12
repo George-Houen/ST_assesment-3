@@ -101,7 +101,7 @@ class FileChoiceButton(Button):
         self.config(command=self.onlick)
         self.selected_file = None
     def onlick(self):
-        self.selection_file = upload_file()
+        self.selected_file = upload_file()
     
     def grid(self, **kwargs) -> Self:
         super().grid(**kwargs)
@@ -132,7 +132,9 @@ class MoveFileButton(Button):
         self.folder_select = folder_select
     def onclick(self):
         if self.file_choice.selected_file:
-            copy(self.file_choice.selected_file, self.folder_select.current_value.get())
+            copy(self.file_choice.selected_file, RAW_DATA_DIR/"stream_macroinvertebrates"/self.folder_select.current_value.get())
+            print(self.folder_select.current_value.get())
+        print("test 2")
     def grid(self, **kwargs) -> Self:
         super().grid(**kwargs)
         return self
