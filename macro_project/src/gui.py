@@ -13,7 +13,7 @@ class App(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
 
-        self.title("program")
+        self.title("Macro project")
         self.resizable(True, True)
         self.minsize(500, 400)
         self.state("normal")
@@ -32,7 +32,7 @@ class App(tk.Tk):
         self.header.config(relief="raised", border=2)
         self.header.columnconfigure(1, weight=1)
 
-        tk.Label(self.header, text="Program", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
+        tk.Label(self.header, text="Macro project", font=("Helvetica", 16, "bold italic")).grid(row=0, column=0)
 
         self.nav_file_manager = tk.Button(self.header, text="manage files", command=lambda:self.switch_active_page(self.page_file_manager))
         self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_eda))
