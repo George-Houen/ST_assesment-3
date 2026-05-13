@@ -17,7 +17,7 @@ class App(tk.Tk):
         self.resizable(True, True)
         self.minsize(500, 400)
         self.state("normal")
-        self.geometry("500x400")
+        self.geometry("500x500")
         self.columnconfigure(0, weight=1)
         self.rowconfigure(1, weight=1)
 
@@ -152,8 +152,7 @@ class App(tk.Tk):
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
-            print(type(self.data_frame))
-            raise TypeError
+            raise TypeError (self.data_frame, type(self.data_frame))
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
