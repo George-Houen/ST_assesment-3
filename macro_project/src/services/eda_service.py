@@ -11,7 +11,7 @@ class EDAService:
         print(output_dir)
         self.filterd_dataframe: pd.DataFrame = dataframe
     
-    def catagorise_data_frame(self, labels:list[str]):
+    def filter_data_frame(self, labels:list[str]):
         self.filterd_dataframe = self.base_dataframe.copy().filter(items=['column_A', 'column_C'])
 
     def save_class_distribution(self) -> Path:         
