@@ -1,4 +1,4 @@
-from tkinter import Label, Button, Frame, filedialog, OptionMenu, StringVar
+from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton)
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -147,3 +147,8 @@ class MoveFileButton(Button):
     def grid(self, **kwargs) -> Self:
         super().grid(**kwargs)
         return self
+    
+class ClassSelect(Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.all_checked = Checkbutton(self)
