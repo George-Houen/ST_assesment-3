@@ -35,7 +35,6 @@ class WorkflowService:
     
     def generate_eda(self, labels:list[str]|None = None) -> None:
         """Create and save the main EDA outputs."""
-        if labels:
             
         dataframe = self.load_dataframe()
         eda = EDAService(dataframe, EDA_OUTPUT_DIR)
