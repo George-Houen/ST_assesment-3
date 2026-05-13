@@ -152,7 +152,7 @@ class ClassSelect(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.all_checked = IntVar(self)
-        self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all")
+        self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all", command=self.toggle_all)
         self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
     
     def clear(self):
@@ -168,8 +168,8 @@ class ClassSelect(Frame):
         self.all_checked_button.grid(row=0, column=0, sticky="w")
         self.all_checked.set(1)
         for i in folders:
-            var = IntVar(self)
-            self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
+            var = IntVar(self,1)
+            self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var, command=self.update_all_checked_passive), var)
         for index, value in enumerate(self.inputs.values()):
             value[0].grid(row = 1+index, column=0, sticky="w")
 
