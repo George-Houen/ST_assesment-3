@@ -166,6 +166,7 @@ class ClassSelect(Frame):
     def generate(self, folders: list[str|Path]):
         self.clear()
         self.all_checked_button.grid(row=0, column=0)
+        self.all_checked.set(1)
         for i in folders:
             var = IntVar(self)
             self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
