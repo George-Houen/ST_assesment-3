@@ -171,7 +171,7 @@ class ClassSelect(Frame):
             var = IntVar(self)
             self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
         for index, value in enumerate(self.inputs.values()):
-            value[0].grid(row = 1+index, column=0)
+            value[0].grid(row = 1+index, column=0, sticky="w")
 
     def generate_auto_dir(self):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
