@@ -1,4 +1,4 @@
-from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton)
+from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton, IntVar)
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -151,4 +151,12 @@ class MoveFileButton(Button):
 class ClassSelect(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.all_checked = Checkbutton(self)
+        self.all_checked = IntVar(self)
+        self.all_checked_button = Checkbutton(self)
+        self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
+    
+    def clear(self):
+        for i in self.inputs.values():
+            i[0].destroy()
+        self.all_checked.set(0)
+        return
