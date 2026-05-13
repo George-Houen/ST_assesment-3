@@ -12,7 +12,7 @@ class EDAService:
         self.filterd_dataframe: pd.DataFrame = dataframe
     
     def filter_data_frame(self, labels:list[str]):
-        self.filterd_dataframe = self.base_dataframe.copy().filter(items=['column_A', 'column_C'])
+        self.filterd_dataframe = self.base_dataframe.copy().filter(items=labels)
 
     def save_class_distribution(self) -> Path:         
         """Save a class-count chart for the dataset."""
