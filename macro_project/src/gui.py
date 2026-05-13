@@ -172,7 +172,7 @@ class App(tk.Tk):
             raise TypeError (self.data_frame, type(self.data_frame))
         
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
-        self.eda_service.filter_data_frame()
+        self.eda_service.filter_data_frame(self.class_select.get())
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
