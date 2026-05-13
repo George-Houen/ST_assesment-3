@@ -173,7 +173,7 @@ class ClassSelect(Frame):
         for index, value in enumerate(self.inputs.values()):
             value[0].grid(row = 1+index, column=0)
 
-    def generate_auto(self):
+    def generate_auto_dir(self):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         folders : list[str|Path] = [f.name for f in path.iterdir() if f.is_dir()]
         self.generate_manual(folders)
