@@ -99,6 +99,11 @@ class App(tk.Tk):
         self.file_select = FileChoiceButton(self.page_file_manager).grid(row=1)
         self.folder_select = FolderSelect(self.page_file_manager).grid(row=2)
         self.move_file_button = MoveFileButton(self.page_file_manager, self.file_select, self.folder_select).grid(row=3)
+        self.select_image = ImageLabel(self.page_file_manager).grid(row=1, rowspan=3, column = 1)
+        self.select_image.resize(width=350)
+        self.file_select.after_command= lambda:(
+            self.select_image.set_image(Path(self.file_select.selected_file)) #type: ignore
+        )
 
 
     def display_eda_summery(self, results : dict[str, float]) -> None:
@@ -147,7 +152,7 @@ class App(tk.Tk):
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
-            raise TypeError
+            raise TypeError (self.data_frame, type(self.data_frame))
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
