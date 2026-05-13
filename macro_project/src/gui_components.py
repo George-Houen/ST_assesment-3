@@ -158,5 +158,14 @@ class ClassSelect(Frame):
     def clear(self):
         for i in self.inputs.values():
             i[0].destroy()
+        self.inputs = {}
         self.all_checked.set(0)
         return
+    
+    def generate(self, folders: list[str|Path]):
+        self.clear()
+        for i in folders:
+            var = IntVar(self)
+            self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
+        for index, value in enumerate(self.inputs.values()):
+            value[0].grid(row = 1+index, column=0)
