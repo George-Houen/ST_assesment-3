@@ -165,7 +165,7 @@ class ClassSelect(Frame):
     
     def generate_manual(self, folders: list[str]|list[Path]):
         self.clear()
-        self.all_checked_button.grid(row=0, column=0)
+        self.all_checked_button.grid(row=0, column=0, sticky="w")
         self.all_checked.set(1)
         for i in folders:
             var = IntVar(self)
