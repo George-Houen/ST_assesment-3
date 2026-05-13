@@ -83,8 +83,11 @@ class App(tk.Tk):
         self.data_frame: DataFrame | None
 
         self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
-        self.summery_box.grid(column=0, columnspan=2, row=1, padx=3, pady=3, sticky="ns")
+        self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
+        
+        self.class_select = ClassSelect(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
+        self.class_select.grid(column=1, row=1, padx=3, pady=3, sticky="nsew")
 
         self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
         self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
