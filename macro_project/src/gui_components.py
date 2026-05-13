@@ -87,12 +87,7 @@ class DropDown(Frame):
             self.close()
             self.state_expanded = False
 
-def upload_file():
-    # Opens a file dialog and returns the selected file's path
-    file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
-    if file_path:
-        print(f"Selected file: {file_path}")
-    return file_path
+
 
 class FileChoiceButton(Button):
     def __init__(self, root, after_command = None, *args, **kwargs):
@@ -101,8 +96,9 @@ class FileChoiceButton(Button):
         self.config(command=self.onlick)
         self.selected_file = None
         self.after_command = after_command
+
     def onlick(self):
-        self.selected_file = upload_file()
+        self.selected_file = self.upload_file()
         if self.after_command:
             self.after_command()
     
@@ -112,6 +108,13 @@ class FileChoiceButton(Button):
     
     def get_file_fir(self):
         return self.selected_file
+    
+    def upload_file(self):
+        # Opens a file dialog and returns the selected file's path
+        file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
+        if file_path:
+            print(f"Selected file: {file_path}")
+        return file_path
 
 
 class FolderSelect(OptionMenu):
