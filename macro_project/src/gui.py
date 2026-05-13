@@ -83,14 +83,16 @@ class App(tk.Tk):
         self.data_frame: DataFrame | None
 
         self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
-        self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns")
+        self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns", rowspan=2)
         self.summery_box.columnconfigure([0,1], weight=1)
         
         self.class_select = ClassSelect(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
         self.class_select.grid(column=1, row=1, padx=3, pady=3, sticky="ns")
 
-        self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
-        self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
+        self.perform_eda_button = Button(self.page_eda, command=self.perform_eda)
+
+        self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
+        self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 4, columnspan=2, sticky = "ew")
 
         self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="")
         self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="")
@@ -160,14 +162,22 @@ class App(tk.Tk):
         
         print(self.data_frame.columns.to_list())
         self.class_select.generate_manual(self.data_frame.columns.to_list())
+        self.perform_eda_button.grid(row=2, column=1, sticky="ew")
 
+        
+    
+    def perform_eda(self):
+        if type(self.data_frame) != DataFrame:
+            print(self.data_frame, type(self.data_frame))
+            raise TypeError (self.data_frame, type(self.data_frame))
+        
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
+        self.eda_service.filter_data_frame()
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
         self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
-        
 
 
 if __name__ == "__main__":
