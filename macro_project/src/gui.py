@@ -147,7 +147,7 @@ class App(tk.Tk):
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
-            raise TypeError
+            raise TypeError (self.data_frame, type(self.data_frame))
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
