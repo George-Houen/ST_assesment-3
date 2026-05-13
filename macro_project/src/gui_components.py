@@ -163,7 +163,7 @@ class ClassSelect(Frame):
         self.all_checked_button.grid_forget()
         return
     
-    def generate(self, folders: list[str|Path]):
+    def generate_manual(self, folders: list[str|Path]):
         self.clear()
         self.all_checked_button.grid(row=0, column=0)
         self.all_checked.set(1)
@@ -172,3 +172,8 @@ class ClassSelect(Frame):
             self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
         for index, value in enumerate(self.inputs.values()):
             value[0].grid(row = 1+index, column=0)
+
+    def generate_auto(self):
+        path = RAW_DATA_DIR/"stream_macroinvertebrates"
+        folders : list[str|Path] = [f.name for f in path.iterdir() if f.is_dir()]
+        self.generate_manual(folders)
