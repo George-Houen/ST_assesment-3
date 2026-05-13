@@ -177,3 +177,15 @@ class ClassSelect(Frame):
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         folders = [f.name for f in path.iterdir() if f.is_dir()]
         self.generate_manual(folders)
+
+    def update_all_checked_passive(self):
+        for i in self.inputs.values():
+            if i[1].get() == 0:
+                self.all_checked.set(0)
+                return
+        self.all_checked.set(1)
+
+    def toggle_all(self):
+        checked = self.all_checked.get()
+        for i in self.inputs.values():
+            i[1].set(checked)
