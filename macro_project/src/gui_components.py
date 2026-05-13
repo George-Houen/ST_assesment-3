@@ -1,4 +1,4 @@
-from tkinter import Label, Button, Frame, filedialog, OptionMenu, StringVar
+from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton, IntVar)
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -87,12 +87,7 @@ class DropDown(Frame):
             self.close()
             self.state_expanded = False
 
-def upload_file():
-    # Opens a file dialog and returns the selected file's path
-    file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
-    if file_path:
-        print(f"Selected file: {file_path}")
-    return file_path
+
 
 class FileChoiceButton(Button):
     def __init__(self, root, after_command = None, *args, **kwargs):
@@ -101,8 +96,9 @@ class FileChoiceButton(Button):
         self.config(command=self.onlick)
         self.selected_file = None
         self.after_command = after_command
+
     def onlick(self):
-        self.selected_file = upload_file()
+        self.selected_file = self.upload_file()
         if self.after_command:
             self.after_command()
     
@@ -112,6 +108,13 @@ class FileChoiceButton(Button):
     
     def get_file_fir(self):
         return self.selected_file
+    
+    def upload_file(self):
+        # Opens a file dialog and returns the selected file's path
+        file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
+        if file_path:
+            print(f"Selected file: {file_path}")
+        return file_path
 
 
 class FolderSelect(OptionMenu):
@@ -144,3 +147,52 @@ class MoveFileButton(Button):
     def grid(self, **kwargs) -> Self:
         super().grid(**kwargs)
         return self
+    
+class ClassSelect(Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.all_checked = IntVar(self)
+        self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all", command=self.toggle_all)
+        self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
+    
+    def clear(self):
+        for i in self.inputs.values():
+            i[0].destroy()
+        self.inputs = {}
+        self.all_checked.set(0)
+        self.all_checked_button.grid_forget()
+        return
+    
+    def generate_manual(self, folders: list[str]|list[Path]):
+        self.clear()
+        self.all_checked_button.grid(row=0, column=0, sticky="w")
+        self.all_checked.set(1)
+        for i in folders:
+            var = IntVar(self,1)
+            self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var, command=self.update_all_checked_passive), var)
+        for index, value in enumerate(self.inputs.values()):
+            value[0].grid(row = 1+index, column=0, sticky="w")
+
+    def generate_auto_dir(self):
+        path = RAW_DATA_DIR/"stream_macroinvertebrates"
+        folders = [f.name for f in path.iterdir() if f.is_dir()]
+        self.generate_manual(folders)
+
+    def update_all_checked_passive(self):
+        for i in self.inputs.values():
+            if i[1].get() == 0:
+                self.all_checked.set(0)
+                return
+        self.all_checked.set(1)
+
+    def toggle_all(self):
+        checked = self.all_checked.get()
+        for i in self.inputs.values():
+            i[1].set(checked)
+
+    def get(self):
+        final = []
+        for k, v in self.inputs.items():
+            if v[1].get()==1:
+                final.append(k)
+        return final
