@@ -189,3 +189,10 @@ class ClassSelect(Frame):
         checked = self.all_checked.get()
         for i in self.inputs.values():
             i[1].set(checked)
+
+    def get(self):
+        final = []
+        for k, v in self.inputs.items():
+            if v[1].get()==1:
+                final += k
+        return final
