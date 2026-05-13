@@ -33,16 +33,17 @@ class WorkflowService:
         print(summary)
         return summary
     
-    def generate_eda(self) -> None:
+    def generate_eda(self, labels:list[str]|None = None) -> None:
         """Create and save the main EDA outputs."""
-
+        if labels:
+            
         dataframe = self.load_dataframe()
         eda = EDAService(dataframe, EDA_OUTPUT_DIR)
         eda.save_class_distribution()
         eda.save_image_size_distribution()
 
     def run_full_pipeline(self) -> None:
-        """Run the default Stage 1 and Stage 2 workflow."""
+        """Run the default Stage 1 workflow."""
 
         self.show_summary()
         self.generate_eda()
