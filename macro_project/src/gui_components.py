@@ -153,7 +153,6 @@ class ClassSelect(Frame):
         super().__init__(*args, **kwargs)
         self.all_checked = IntVar(self)
         self.all_checked_button = Checkbutton(self)
-        self.all_checked_button.grid(row=0, column=0)
         self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
     
     def clear(self):
@@ -161,10 +160,12 @@ class ClassSelect(Frame):
             i[0].destroy()
         self.inputs = {}
         self.all_checked.set(0)
+        self.all_checked_button.grid_forget()
         return
     
     def generate(self, folders: list[str|Path]):
         self.clear()
+        self.all_checked_button.grid(row=0, column=0)
         for i in folders:
             var = IntVar(self)
             self.inputs[str(i)] = (Checkbutton(self, text=str(i), variable=var), var)
