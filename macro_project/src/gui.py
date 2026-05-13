@@ -155,7 +155,12 @@ class App(tk.Tk):
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
+            print(self.data_frame, type(self.data_frame))
             raise TypeError (self.data_frame, type(self.data_frame))
+        
+        print(self.data_frame.columns.to_list())
+        self.class_select.generate_manual(self.data_frame.columns.to_list())
+
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
