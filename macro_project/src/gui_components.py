@@ -153,6 +153,7 @@ class ClassSelect(Frame):
         super().__init__(*args, **kwargs)
         self.all_checked = IntVar(self)
         self.all_checked_button = Checkbutton(self)
+        self.all_checked_button.grid(row=0, column=0)
         self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
     
     def clear(self):
