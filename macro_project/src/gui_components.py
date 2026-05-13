@@ -194,5 +194,5 @@ class ClassSelect(Frame):
         final = []
         for k, v in self.inputs.items():
             if v[1].get()==1:
-                final += k
+                final.append(k)
         return final
