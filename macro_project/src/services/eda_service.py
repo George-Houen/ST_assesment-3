@@ -70,10 +70,10 @@ class EDAService:
 
         readable = self._require_readable_images()
         return {
-            "total_images": int(len(readable)),
-            "total_classes": int(readable["label"].nunique()),
-            "mean_width": float(readable["width"].mean()),
-            "mean_height": float(readable["height"].mean()),
+            "total_images": self._safe_int(len(readable)),
+            "total_classes": self._safe_int(readable["label"].nunique()),
+            "mean_width": self._safe_round(readable["width"].mean()),
+            "mean_height": self._safe_round(readable["height"].mean()),
             "min_width": self._safe_int(readable["width"].min()),
             "max_width": self._safe_int(readable["width"].max()),
             "min_height": self._safe_int(readable["height"].min()),
