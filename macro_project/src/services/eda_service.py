@@ -53,7 +53,7 @@ class EDAService:
             "width_height_scatter_plot" : self.save_width_height_scatter_plot,
             "sample_image_grid" : self.save_sample_image_grid,
             "height_by_class_boxplot" : self.save_height_by_class_boxplot,
-            "pixel_intensity_histogram" : self.save_pixel_intensity_histogram,
+            #"pixel_intensity_histogram" : self.save_pixel_intensity_histogram,
             "image_quality_issues" : self.save_image_quality_issues,
             "class_imbalance_report" : self.save_class_imbalance_report,
             "stage2_recommendations" : self.save_stage2_recommendations,
@@ -207,8 +207,8 @@ class EDAService:
             if not bool(row["readable"]):
                 issues.append("unreadable_or_corrupted")
             if bool(row["readable"]) and (
-                row["width"] < VERY_SMALL_IMAGE_THRESHOLD
-                or row["height"] < VERY_SMALL_IMAGE_THRESHOLD
+                row["width"] < VERY_SMALL_IMAGE_THRESHOLD[0]
+                or row["height"] < VERY_SMALL_IMAGE_THRESHOLD[1]
             ):
                 issues.append("very_small_image")
             if bool(row["readable"]) and (
