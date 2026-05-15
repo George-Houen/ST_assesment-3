@@ -57,7 +57,7 @@ class EDAService:
 
         output = {}
         for title, func in operations.items():
-            self.track_save_all_progress = "processing: "+title
+            self.track_save_all_progress = title
             if func_each is not None:
                 func_each()
             output[title]=func()

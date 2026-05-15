@@ -72,15 +72,15 @@ class App(tk.Tk):
         self.page_eda.configure()
         self.page_eda.columnconfigure([0,1], weight=1, uniform="equal_cols")
         self.page_eda.rowconfigure(1, minsize=3)
-        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_indexing)
-        self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
+        self.indexing_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_indexing)
+        self.indexing_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
 
         self.indexer_counter = tk.StringVar(value="dataset has not been indexed")
         self.index_count_label = tk.Label(self.page_eda, textvariable=self.indexer_counter)
         self.index_count_label.grid(column=1, row=0, sticky="ew")
 
-        self.data_frame: DataFrame | None
+        self.data_frame: DataFrame | None = None
 
         self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
         self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns")
@@ -89,7 +89,9 @@ class App(tk.Tk):
         self.class_select = ClassSelect(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
         self.class_select.grid(column=1, row=1, padx=3, pady=3, sticky="ns")
 
-        self.perform_eda_button = Button(self.class_select, command=self.perform_eda)
+        self.perform_eda_button = Button(self.class_select, command=self.run_eda)
+        self.track_eda_counter = tk.StringVar(value="")
+        self.track_eda = Label(self.class_select)
 
         self.eda_output_images = Frame(self.page_eda)
         self.eda_output_images.grid(column = 0, row = 2, columnspan=2, sticky = "nsew")
@@ -139,7 +141,15 @@ class App(tk.Tk):
 
     def run_indexing(self):
         print("start indexing")
-        
+        thread = Thread(
+            target=lambda:self.indexer.build_dataframe(
+                lambda:self.after( 2, func = lambda:self.indexer_counter.set(f"{self.indexer.counter} files indexed.")),
+                lambda: self.after( 2,
+                    self.finished_indexing
+                )
+            )
+        )
+        thread.start()
         
 
     def finished_indexing(self):
@@ -152,6 +162,7 @@ class App(tk.Tk):
         print(self.data_frame.columns.to_list())
         self.class_select.generate_manual(list(self.data_frame["label"]))
         self.perform_eda_button.grid(column=0, sticky="nsew")
+        self.track_eda.grid(column=0, sticky="nsew")
 
         
     
@@ -168,9 +179,9 @@ class App(tk.Tk):
     
         thread = Thread(
             target=lambda:self.eda_service.save_all(
-                lambda:self.after( 2, func = lambda:self.indexer_counter.set(f"{self.indexer.counter} files indexed.")),
+                lambda:self.after( 2, func = lambda:self.track_eda_counter.set(f"currently processing: {self.eda_service.track_save_all_progress}")),
                 lambda: self.after( 2,
-                    self.finished_indexing
+                    self.finished_eda
                 )
             )
         )
@@ -178,6 +189,7 @@ class App(tk.Tk):
         
 
     def finished_eda(self):
+        self.track_eda_counter.set("eda complete")
         image_paths = self.eda_service.output_images
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
         for i in self.eda_output_images.winfo_children():
