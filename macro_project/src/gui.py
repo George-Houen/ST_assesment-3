@@ -94,8 +94,8 @@ class App(tk.Tk):
         self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
         self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
 
-        self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="")
-        self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="")
+        self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="ew")
+        self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="ew")
 
 
         #file control page
