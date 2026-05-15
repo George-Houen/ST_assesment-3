@@ -21,6 +21,13 @@ class DatasetIndexer:
             
             image = cv2.imread(str(file_path))
             if image is None:
+                records.append(
+                    {
+                        "file_path": str(file_path),
+                        "label": file_path.parent.name,
+                        "readable": image is not None,
+                    }
+                )
                 continue
             
             height, width = image.shape[:2]
@@ -34,6 +41,7 @@ class DatasetIndexer:
                     "width": width,
                     "height": height,
                     "channels": channels,
+                    "readable": True
                 }
             )
             self.counter = len(records)
