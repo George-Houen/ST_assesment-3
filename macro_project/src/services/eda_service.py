@@ -5,7 +5,7 @@ import seaborn as sns
 import numpy as np
 import cv2
 
-from ..config import (
+from config import (
     CLASS_IMBALANCE_REPORT_PATH,
     PIXEL_ANALYSIS_SAMPLE_SIZE,
     QUALITY_ISSUES_PATH,
@@ -34,12 +34,14 @@ class EDAService:
     def filter_data_frame(self, labels:list[str]):
         print(labels)
         self.filterd_dataframe = self.base_dataframe[self.base_dataframe["label"].isin(labels)]
+        readable_mask = self.base_dataframe["readable"].astype(bool)
+        self.readable_dataframe = self.filterd_dataframe[readable_mask]
 
     def save_class_distribution(self) -> Path:         
         """Save a class-count chart for the dataset."""
         plt.figure(figsize=(12, 6))         
-        order = self.filterd_dataframe["label"].value_counts().index         
-        sns.countplot(data=self.filterd_dataframe, x="label", order=order)         
+        order = self.readable_dataframe["label"].value_counts().index         
+        sns.countplot(data=self.readable_dataframe, x="label", order=order)         
         plt.xticks(rotation=90)         
         plt.title("Macroinvertebrate Images per Class")         
         plt.tight_layout()
