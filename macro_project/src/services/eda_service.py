@@ -65,7 +65,7 @@ class EDAService:
         plt.savefig(output_file_name)         
         plt.close()
         return output_file_name
-    def build_summary(self) -> dict[str, float]:         
+    def build_summary(self) -> dict[str, int | float | str]:         
         """Return key dataset summary statistics."""
 
         readable = self._require_readable_images()
@@ -78,8 +78,8 @@ class EDAService:
             "max_width": self._safe_int(readable["width"].max()),
             "min_height": self._safe_int(readable["height"].min()),
             "max_height": self._safe_int(readable["height"].max()),
-            "number_of_unreadable_files": int((~self.dataframe["readable"]).sum()),
-            "supported_file_types_found": ", ".join(sorted(self.dataframe["file_extension"].unique()),
+            "number_of_unreadable_files": int((~self.readable_dataframe["readable"]).sum()),
+            "supported_file_types_found": str(", ".join(sorted(self.readable_dataframe["file_extension"].unique())))
             }
     
 
