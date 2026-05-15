@@ -111,13 +111,13 @@ class App(tk.Tk):
         )
 
 
-    def display_eda_summery(self, results : dict[str, float]) -> None:
+    def display_eda_summery(self, results : dict[str, float | int | str]) -> None:
         for child in self.summery_box.winfo_children():
             child.destroy()
         i = 0
         for k,v in results.items():
             tk.Label(self.summery_box, text=k).grid(row=i, column=0)
-            tk.Label(self.summery_box, text=round(v, 2)).grid(row=i, column=2)
+            tk.Label(self.summery_box, text=v).grid(row=i, column=2)
             i+=1
         tk.Frame( #vertical culumn serperator
                 self.summery_box,
