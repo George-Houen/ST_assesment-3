@@ -28,7 +28,7 @@ class ImageLabel(Label):
 
         self.resize(height= height, width= width)
         self.image_render = ImageTk.PhotoImage(self.image_data)
-        self.configure(image=self.image_render)
+        self.configure(image=self.image_render, anchor="center")
         """ removing cos it is so freaking broken
         self.bind("<Configure>", self.auto_resize)
         """
