@@ -70,10 +70,10 @@ class EDAService:
 
         readable = self._require_readable_images()
         return {
-            "total_images": int(len(self.filterd_dataframe)),
-            "total_classes": int(self.filterd_dataframe["label"].nunique()),
-            "mean_width": float(self.filterd_dataframe["width"].mean()),
-            "mean_height": float(self.filterd_dataframe["height"].mean()),
+            "total_images": int(len(readable)),
+            "total_classes": int(readable["label"].nunique()),
+            "mean_width": float(readable["width"].mean()),
+            "mean_height": float(readable["height"].mean()),
             "min_width": self._safe_int(readable["width"].min()),
             "max_width": self._safe_int(readable["width"].max()),
             "min_height": self._safe_int(readable["height"].min()),
