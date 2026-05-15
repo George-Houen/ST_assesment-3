@@ -16,6 +16,8 @@ from ..config import (
     VERY_SMALL_IMAGE_THRESHOLD,
 )
 
+from utils.file_utils import ensure_directory
+
 class EDAService:
     """Generate and save EDA outputs for the indexed image dataset."""
     def __init__(self, dataframe: pd.DataFrame, output_dir: Path) -> None:
