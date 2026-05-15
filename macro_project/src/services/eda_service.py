@@ -370,9 +370,13 @@ class EDAService:
     
         for _, row in sample.iterrows():
             grayscale = cv2.imread(str(row["file_path"]), cv2.IMREAD_GRAYSCALE)
-            if grayscale is not None:
-                image_means.append(float(np.mean(grayscale)))
-                image_standard_deviations.append(float(np.std(grayscale)))
+            if grayscale is None:
+                continue
+
+            grayscale = np.asarray(grayscale)
+
+            image_means.append(float(grayscale.mean()))
+            image_standard_deviations.append(grayscale.mean())
     
         if not image_means:
             return (
