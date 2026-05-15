@@ -167,6 +167,8 @@ class App(tk.Tk):
         
     
     def run_eda(self):
+        for i in self.eda_output_images.winfo_children():
+            i.destroy()
         if type(self.data_frame) != DataFrame:
             print(self.data_frame, type(self.data_frame))
             raise TypeError (self.data_frame, type(self.data_frame))
@@ -186,20 +188,19 @@ class App(tk.Tk):
             )
         )
         thread.start()
-        
+    
+    def generate_eda_dropdown(self, title, path):
+        drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
+        image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
+        image.set_image(path, **config.EDA_IMAGE_SIZE)
 
     def finished_eda(self):
         self.track_eda_counter.set("eda complete")
         image_paths = self.eda_service.output_images
-        EDA_IMAGE_SIZE = {"width": 500, "height": None}
-        for i in self.eda_output_images.winfo_children():
-            i.destroy()
-        count = 0
+        
         for title, path in image_paths.items():
-            drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, row = count, columnspan=2, sticky = "ew")
-            image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
-            image.set_image(path, **EDA_IMAGE_SIZE)
-            count+=1
+            self.generate_eda_dropdown(title, path)
+            
         
 
 

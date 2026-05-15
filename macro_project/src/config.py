@@ -8,6 +8,8 @@ MODEL_OUTPUT_DIR = OUTPUTS_DIR / "models"
 IMAGE_SIZE = (128, 128)
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp"}
 
+EDA_IMAGE_SIZE = {"width": 500, "height": None}
+
 #this are constants that apeared in Pranavs example code for the EDA functions
 #i will try my best to give them realistic values, but i dont know what alot of them are for
 REPORT_OUTPUT_DIR = BASE_DIR / "reports"

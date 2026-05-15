@@ -55,10 +55,8 @@ class EDAService:
             "height_by_class_boxplot" : self.save_height_by_class_boxplot,
             #"pixel_intensity_histogram" : self.save_pixel_intensity_histogram,
             "image_quality_issues" : self.save_image_quality_issues,
-            "class_imbalance_report" : self.save_class_imbalance_report,
-            "stage2_recommendations" : self.save_stage2_recommendations,
+            "class_imbalance_report" : self.save_class_imbalance_report
         }
-
         output = {}
         for title, func in operations.items():
             self.track_save_all_progress = title
@@ -67,6 +65,7 @@ class EDAService:
             output[title]=func()
         self.output_images = output
         if func_end:func_end()
+        self.save_stage2_recommendations
         return output
     
     def build_summary(self) -> dict[str, int | float | str]:         
