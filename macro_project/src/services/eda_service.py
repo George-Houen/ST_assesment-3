@@ -36,35 +36,21 @@ class EDAService:
         self.filterd_dataframe = self.base_dataframe[self.base_dataframe["label"].isin(labels)]
         readable_mask = self.base_dataframe["readable"].astype(bool)
         self.readable_dataframe = self.filterd_dataframe[readable_mask]
-
-    def save_class_distribution(self) -> Path:         
-        """Save a class-count chart for the dataset."""
-        readable = self._require_readable_images()
-
-        plt.figure(figsize=(12, 6))         
-        order = readable["label"].value_counts().index         
-        sns.countplot(data=readable, x="label", order=order)         
-        plt.xticks(rotation=90)         
-        plt.title("Macroinvertebrate Images per Class")         
-        plt.tight_layout()
-        output_file_name = self.output_dir_eda / "class_distribution.png"
-        plt.savefig(output_file_name)         
-        plt.close()
-        return output_file_name
-    def save_image_size_distribution(self) -> Path:         
-        """Save width and height distribution charts."""
-        readable = self._require_readable_images()
-
-        fig, axes = plt.subplots(1, 2, figsize=(12, 5))         
-        sns.histplot(readable["width"], bins=20, ax=axes[0]) #type: ignore    
-        sns.histplot(readable["height"], bins=20, ax=axes[1]) #type: ignore     
-        axes[0].set_title("Image Width Distribution")         
-        axes[1].set_title("Image Height Distribution")         
-        plt.tight_layout()   
-        output_file_name = self.output_dir_eda / "image_size_distribution.png"
-        plt.savefig(output_file_name)         
-        plt.close()
-        return output_file_name
+    
+    def save_all(self) -> dict[str, Path]:
+            output = {
+                "class_distribution" : self.save_class_distribution(),
+                "image_size_distribution" : self.save_image_size_distribution(),
+                "width_height_scatter_plot" : self.save_width_height_scatter_plot(),
+                "sample_image_grid" : self.save_sample_image_grid(),
+                "height_by_class_boxplot" : self.save_height_by_class_boxplot(),
+                "pixel_intensity_histogram" : self.save_pixel_intensity_histogram(),
+                "image_quality_issues" : self.save_image_quality_issues(),
+                "class_imbalance_report" : self.save_class_imbalance_report(),
+                "stage2_recommendations" : self.save_stage2_recommendations(),
+            }
+            return output
+    
     def build_summary(self) -> dict[str, int | float | str]:         
         """Return key dataset summary statistics."""
 
@@ -82,6 +68,37 @@ class EDAService:
             "supported_file_types_found": str(", ".join(sorted(self.readable_dataframe["file_extension"].unique())))
             }
     
+    def save_class_distribution(self) -> Path:         
+        """Save a class-count chart for the dataset."""
+        readable = self._require_readable_images()
+
+        plt.figure(figsize=(12, 6))         
+        order = readable["label"].value_counts().index         
+        sns.countplot(data=readable, x="label", order=order)         
+        plt.xticks(rotation=90)         
+        plt.title("Macroinvertebrate Images per Class")         
+        plt.tight_layout()
+        output_file_name = self.output_dir_eda / "class_distribution.png"
+        plt.savefig(output_file_name)         
+        plt.close()
+        return output_file_name
+    
+    def save_image_size_distribution(self) -> Path:         
+        """Save width and height distribution charts."""
+        readable = self._require_readable_images()
+
+        fig, axes = plt.subplots(1, 2, figsize=(12, 5))         
+        sns.histplot(readable["width"], bins=20, ax=axes[0]) #type: ignore    
+        sns.histplot(readable["height"], bins=20, ax=axes[1]) #type: ignore     
+        axes[0].set_title("Image Width Distribution")         
+        axes[1].set_title("Image Height Distribution")         
+        plt.tight_layout()   
+        output_file_name = self.output_dir_eda / "image_size_distribution.png"
+        plt.savefig(output_file_name)         
+        plt.close()
+        return output_file_name
+    
+
 
     #following functions provided from Pranav by email with permision:
 
@@ -101,37 +118,8 @@ class EDAService:
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
-    
+
     def save_sample_image_grid(self) -> Path:
-        """Save a grid of representative readable sample images."""
-        readable = self._require_readable_images()
-        samples = self._select_representative_samples(readable)
-    
-        columns = min(4, len(samples))
-        rows = int(np.ceil(len(samples) / columns))
-        fig, axes = plt.subplots(rows, columns, figsize=(4 * columns, 3.4 * rows))
-        axes_array = np.array(axes).reshape(-1)
-    
-        for axis in axes_array:
-            axis.axis("off")
-    
-        for axis, (_, row) in zip(axes_array, samples.iterrows()):
-            image = cv2.imread(str(row["file_path"]), cv2.IMREAD_COLOR)
-            if image is None:
-                continue
-            rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            axis.imshow(rgb_image)
-            axis.set_title(str(row["label"]), fontsize=10)
-            axis.axis("off")
-    
-        fig.suptitle("Representative Sample Images by Class")
-        fig.tight_layout()
-        output_path = self.output_dir_eda / "sample_image_grid.png"
-        fig.savefig(output_path, dpi=150)
-        plt.close(fig)
-        return output_path
-    
-    def save_width_by_class_boxplot(self) -> Path:
         """Save a boxplot comparing image widths by class."""
         readable = self._require_readable_images()
     
