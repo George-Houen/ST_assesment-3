@@ -377,8 +377,8 @@ class EDAService:
             if not bool(row["readable"]):
                 issue_count += 1
             if bool(row["readable"]) and (
-                row["width"] < VERY_SMALL_IMAGE_THRESHOLD
-                or row["height"] < VERY_SMALL_IMAGE_THRESHOLD
+                row["width"] < VERY_SMALL_IMAGE_THRESHOLD[0]
+                or row["height"] < VERY_SMALL_IMAGE_THRESHOLD[1]
             ):
                 issue_count += 1
             if bool(row["readable"]) and (
