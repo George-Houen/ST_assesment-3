@@ -85,7 +85,7 @@ class EDAService:
 
     #following functions provided from Pranav by email with permision:
 
-    def generate_width_height_scatter_plot(self) -> Path:
+    def save_width_height_scatter_plot(self) -> Path:
         """Save a scatter plot of image width versus height."""
         readable = self._require_readable_images()
     
@@ -102,7 +102,7 @@ class EDAService:
         plt.close()
         return output_path
     
-    def generate_sample_image_grid(self) -> Path:
+    def save_sample_image_grid(self) -> Path:
         """Save a grid of representative readable sample images."""
         readable = self._require_readable_images()
         samples = self._select_representative_samples(readable)
@@ -131,7 +131,7 @@ class EDAService:
         plt.close(fig)
         return output_path
     
-    def generate_width_by_class_boxplot(self) -> Path:
+    def save_width_by_class_boxplot(self) -> Path:
         """Save a boxplot comparing image widths by class."""
         readable = self._require_readable_images()
     
@@ -148,7 +148,7 @@ class EDAService:
         plt.close()
         return output_path
     
-    def generate_height_by_class_boxplot(self) -> Path:
+    def save_height_by_class_boxplot(self) -> Path:
         """Save a boxplot comparing image heights by class."""
         readable = self._require_readable_images()
     
@@ -165,7 +165,7 @@ class EDAService:
         plt.close()
         return output_path
     
-    def generate_pixel_intensity_histogram(self) -> Path:
+    def save_pixel_intensity_histogram(self) -> Path:
         """Save a grayscale pixel intensity histogram from sampled images."""
         readable = self._require_readable_images()
         sample = readable.head(PIXEL_ANALYSIS_SAMPLE_SIZE)
@@ -191,7 +191,7 @@ class EDAService:
         plt.close()
         return output_path
     
-    def generate_image_quality_issues(self) -> Path:
+    def save_image_quality_issues(self) -> Path:
         """Save image quality flags to CSV."""
         records = []
         for _, row in self.filterd_dataframe.iterrows():
@@ -235,7 +235,7 @@ class EDAService:
         issues_dataframe.to_csv(QUALITY_ISSUES_PATH, index=False)
         return QUALITY_ISSUES_PATH
     
-    def generate_class_imbalance_report(self) -> Path:
+    def save_class_imbalance_report(self) -> Path:
         """Save a written class imbalance report."""
         class_counts = self.filterd_dataframe["label"].value_counts().sort_values(
             ascending=False
@@ -277,7 +277,7 @@ class EDAService:
         CLASS_IMBALANCE_REPORT_PATH.write_text("\n".join(report), encoding="utf-8")
         return CLASS_IMBALANCE_REPORT_PATH
     
-    def generate_stage2_recommendations(self) -> Path:
+    def save_stage2_recommendations(self) -> Path:
         """Save EDA-based recommendations for future Stage 2 planning."""
         readable = self._require_readable_images()
         class_counts = self.filterd_dataframe["label"].value_counts()

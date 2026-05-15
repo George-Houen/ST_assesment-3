@@ -178,6 +178,7 @@ class App(tk.Tk):
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
         self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
+        
 
 
 if __name__ == "__main__":
