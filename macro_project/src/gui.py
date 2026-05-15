@@ -184,9 +184,6 @@ class App(tk.Tk):
             image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
             image.set_image(path, **EDA_IMAGE_SIZE)
             count+=1
-
-        self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
-        self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
         
 
 
