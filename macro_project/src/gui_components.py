@@ -1,4 +1,15 @@
-from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton, IntVar)
+from tkinter import (
+    Label, 
+    Button, 
+    Frame, 
+    filedialog, 
+    OptionMenu, 
+    StringVar, 
+    Checkbutton, 
+    IntVar,
+    Canvas
+    )
+from tkinter import ttk
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -196,3 +207,12 @@ class ClassSelect(Frame):
             if v[1].get()==1:
                 final.append(k)
         return final
+    
+class ScrollFrame(Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.canvas = Canvas(self)
+        self.canvas.grid(row=0, column=0, sticky="nsew")
+        self.scroll_bar = ttk.Scrollbar(self)
+        self.scroll_bar.grid(row=0, column=1, sticky="nsew")
+        self.columnconfigure(0, weight=1)
