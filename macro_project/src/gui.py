@@ -91,12 +91,9 @@ class App(tk.Tk):
 
         self.perform_eda_button = Button(self.class_select, command=self.perform_eda)
 
-        self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
-        self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
-
-        self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="ew")
-        self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="ew")
-
+        self.eda_output_images = Frame(self.page_eda)
+        self.eda_output_images.grid(column = 0, row = 2, columnspan=2, sticky = "nsew")
+        self.eda_output_images.columnconfigure((0,1), weight=1)
 
         #file control page
 
@@ -173,9 +170,21 @@ class App(tk.Tk):
         
         self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR, config.REPORT_OUTPUT_DIR)
         self.eda_service.filter_data_frame(self.class_select.get())
+
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
+
+        image_paths = self.eda_service.save_all()
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
+        for i in self.eda_output_images.winfo_children():
+            i.destroy()
+        count = 0
+        for title, path in image_paths.items():
+            drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, row = count, columnspan=2, sticky = "ew")
+            image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
+            image.set_image(path, **EDA_IMAGE_SIZE)
+            count+=1
+
         self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
         self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
         
