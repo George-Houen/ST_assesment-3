@@ -172,7 +172,7 @@ class EDAService:
     def generate_image_quality_issues(self) -> Path:
         """Save image quality flags to CSV."""
         records = []
-        for _, row in self.dataframe.iterrows():
+        for _, row in self.filterd_dataframe.iterrows():
             issues = []
             if not bool(row["readable"]):
                 issues.append("unreadable_or_corrupted")
@@ -215,7 +215,7 @@ class EDAService:
     
     def generate_class_imbalance_report(self) -> Path:
         """Save a written class imbalance report."""
-        class_counts = self.dataframe["label"].value_counts().sort_values(
+        class_counts = self.filterd_dataframe["label"].value_counts().sort_values(
             ascending=False
         )
         largest_class = class_counts.idxmax()
@@ -258,10 +258,10 @@ class EDAService:
     def generate_stage2_recommendations(self) -> Path:
         """Save EDA-based recommendations for future Stage 2 planning."""
         readable = self._require_readable_images()
-        class_counts = self.dataframe["label"].value_counts()
+        class_counts = self.filterd_dataframe["label"].value_counts()
         width_range = int(readable["width"].max() - readable["width"].min())
         height_range = int(readable["height"].max() - readable["height"].min())
-        unreadable_count = int((~self.dataframe["readable"]).sum())
+        unreadable_count = int((~self.filterd_dataframe["readable"]).sum())
         quality_issues = self._build_quality_issues_dataframe()
     
         smallest_class_count = int(class_counts.min())
@@ -342,7 +342,7 @@ class EDAService:
     def _build_quality_issues_dataframe(self) -> pd.DataFrame:
         """Build quality issue rows without writing them."""
         records = []
-        for _, row in self.dataframe.iterrows():
+        for _, row in self.filterd_dataframe.iterrows():
             issue_count = 0
             if not bool(row["readable"]):
                 issue_count += 1
