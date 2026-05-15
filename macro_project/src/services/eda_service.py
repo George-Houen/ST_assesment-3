@@ -1,4 +1,8 @@
 from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")# DO NOT TOUCH: this has to default to a diffirent thread so that it doesnt mess with the GUI
+
 import matplotlib.pyplot as plt 
 import pandas as pd 
 import seaborn as sns
