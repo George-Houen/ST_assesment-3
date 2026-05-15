@@ -36,11 +36,9 @@ class App(tk.Tk):
 
         self.nav_file_manager = tk.Button(self.header, text="manage files", command=lambda:self.switch_active_page(self.page_file_manager))
         self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_eda))
-        self.nav_3 = tk.Button(self.header, text="prediction", command=lambda:self.switch_active_page(self.page_3))
 
         self.nav_file_manager.grid(row=0, column=2)
         self.nav_2.grid(row=0, column=3)
-        self.nav_3.grid(row=0, column=4, sticky="e")
 
         #footer 
         self.footer.config(relief="raised", border=2)
@@ -56,13 +54,11 @@ class App(tk.Tk):
 
         self.page_file_manager = tk.Frame(self.body, border=2)
         self.page_eda = tk.Frame(self.body)
-        self.page_3 = tk.Frame(self.body, background="red")
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
             self.page_file_manager,
-            self.page_eda,
-            self.page_3
+            self.page_eda
         ]
         self.switch_active_page(self.page_file_manager) #set as default
 
