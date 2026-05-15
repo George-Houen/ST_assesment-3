@@ -20,11 +20,16 @@ from utils.file_utils import ensure_directory
 
 class EDAService:
     """Generate and save EDA outputs for the indexed image dataset."""
-    def __init__(self, dataframe: pd.DataFrame, output_dir: Path) -> None:
+    def __init__(self, dataframe: pd.DataFrame, output_dir_eda: Path, output_dir_report: Path) -> None:
         self.base_dataframe : pd.DataFrame = dataframe         
-        self.output_dir = output_dir
-        print(output_dir)
+        self.output_dir_eda = output_dir_eda
+        self.output_dir_report = output_dir_report
         self.filterd_dataframe: pd.DataFrame = dataframe
+        readable_mask = self.base_dataframe["readable"].astype(bool)
+        self.readable_dataframe = self.base_dataframe[readable_mask]
+
+        ensure_directory(self.output_dir_eda)
+        ensure_directory(self.output_dir_report)
     
     def filter_data_frame(self, labels:list[str]):
         print(labels)
@@ -38,7 +43,7 @@ class EDAService:
         plt.xticks(rotation=90)         
         plt.title("Macroinvertebrate Images per Class")         
         plt.tight_layout()
-        output_file_name = self.output_dir / "class_distribution.png"
+        output_file_name = self.output_dir_eda / "class_distribution.png"
         plt.savefig(output_file_name)         
         plt.close()
         return output_file_name
@@ -50,7 +55,7 @@ class EDAService:
         axes[0].set_title("Image Width Distribution")         
         axes[1].set_title("Image Height Distribution")         
         plt.tight_layout()   
-        output_file_name = self.output_dir / "image_size_distribution.png"
+        output_file_name = self.output_dir_eda / "image_size_distribution.png"
         plt.savefig(output_file_name)         
         plt.close()
         return output_file_name
@@ -77,7 +82,7 @@ class EDAService:
         plt.legend(title="Class", bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.tight_layout()
     
-        output_path = self.output_dir / "width_height_scatter.png"
+        output_path = self.output_dir_eda / "width_height_scatter.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -106,7 +111,7 @@ class EDAService:
     
         fig.suptitle("Representative Sample Images by Class")
         fig.tight_layout()
-        output_path = self.output_dir / "sample_image_grid.png"
+        output_path = self.output_dir_eda / "sample_image_grid.png"
         fig.savefig(output_path, dpi=150)
         plt.close(fig)
         return output_path
@@ -123,7 +128,7 @@ class EDAService:
         plt.xticks(rotation=35, ha="right")
         plt.tight_layout()
     
-        output_path = self.output_dir / "width_by_class_boxplot.png"
+        output_path = self.output_dir_eda / "width_by_class_boxplot.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -140,7 +145,7 @@ class EDAService:
         plt.xticks(rotation=35, ha="right")
         plt.tight_layout()
     
-        output_path = self.output_dir / "height_by_class_boxplot.png"
+        output_path = self.output_dir_eda / "height_by_class_boxplot.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -166,7 +171,7 @@ class EDAService:
         plt.ylabel("Frequency")
         plt.tight_layout()
     
-        output_path = self.output_dir / "pixel_intensity_histogram.png"
+        output_path = self.output_dir_eda / "pixel_intensity_histogram.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
