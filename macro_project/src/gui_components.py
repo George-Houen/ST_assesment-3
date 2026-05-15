@@ -216,3 +216,11 @@ class ScrollFrame(Frame):
         self.scroll_bar = ttk.Scrollbar(self)
         self.scroll_bar.grid(row=0, column=1, sticky="nsew")
         self.columnconfigure(0, weight=1)
+        self.canvas.configure(yscrollcommand=self.scroll_bar.set)
+
+        self.main_frame = Frame(self.canvas)
+        self.main_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
+        self.canvas.create_window((0, 0), window=self.main_frame, anchor="nw")

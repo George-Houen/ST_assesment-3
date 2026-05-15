@@ -23,7 +23,7 @@ class App(tk.Tk):
 
         self.header = tk.Frame(self)
         self.header.grid(row=0, column=0, sticky="nsew")
-        self.body = tk.Frame(self)
+        self.body = ScrollFrame(self)
         self.body.grid(row=1, column=0, sticky="nsew")
         self.footer = tk.Frame(self)
         self.footer.grid(row=2, column=0, sticky="nsew")
@@ -52,8 +52,8 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body, border=2)
-        self.page_eda = tk.Frame(self.body)
+        self.page_file_manager = tk.Frame(self.body.main_frame, border=2)
+        self.page_eda = tk.Frame(self.body.main_frame)
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
