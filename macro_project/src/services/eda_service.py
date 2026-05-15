@@ -79,7 +79,7 @@ class EDAService:
             "min_height": self._safe_int(readable["height"].min()),
             "max_height": self._safe_int(readable["height"].max()),
             "number_of_unreadable_files": int((~self.dataframe["readable"]).sum()),
-            "supported_file_types_found": supported_types,
+            "supported_file_types_found": ", ".join(sorted(self.dataframe["file_extension"].unique()),
             }
     
 

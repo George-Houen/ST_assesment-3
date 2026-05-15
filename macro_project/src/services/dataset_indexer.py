@@ -33,6 +33,7 @@ class DatasetIndexer:
             height, width = image.shape[:2]
             channels = image.shape[2] if len(image.shape) == 3 else 1
             label = file_path.parent.name
+            extension = file_path.suffix.lower()
             
             records.append(
                 {
@@ -41,7 +42,8 @@ class DatasetIndexer:
                     "width": width,
                     "height": height,
                     "channels": channels,
-                    "readable": True
+                    "readable": True,
+                    "file_extension": extension
                 }
             )
             self.counter = len(records)
