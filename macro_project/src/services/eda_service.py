@@ -30,6 +30,9 @@ class EDAService:
 
         ensure_directory(self.output_dir_eda)
         ensure_directory(self.output_dir_report)
+
+        self.output_summery: dict[str, int | float | str] = {}
+        self.output_images:dict[str, Path] = {}
     
     def filter_data_frame(self, labels:list[str]):
         print(labels)
@@ -38,24 +41,25 @@ class EDAService:
         self.readable_dataframe = self.filterd_dataframe[readable_mask]
     
     def save_all(self) -> dict[str, Path]:
-            output = {
-                "class_distribution" : self.save_class_distribution(),
-                "image_size_distribution" : self.save_image_size_distribution(),
-                "width_height_scatter_plot" : self.save_width_height_scatter_plot(),
-                "sample_image_grid" : self.save_sample_image_grid(),
-                "height_by_class_boxplot" : self.save_height_by_class_boxplot(),
-                "pixel_intensity_histogram" : self.save_pixel_intensity_histogram(),
-                "image_quality_issues" : self.save_image_quality_issues(),
-                "class_imbalance_report" : self.save_class_imbalance_report(),
-                "stage2_recommendations" : self.save_stage2_recommendations(),
-            }
-            return output
+        output = {
+            "class_distribution" : self.save_class_distribution(),
+            "image_size_distribution" : self.save_image_size_distribution(),
+            "width_height_scatter_plot" : self.save_width_height_scatter_plot(),
+            "sample_image_grid" : self.save_sample_image_grid(),
+            "height_by_class_boxplot" : self.save_height_by_class_boxplot(),
+            "pixel_intensity_histogram" : self.save_pixel_intensity_histogram(),
+            "image_quality_issues" : self.save_image_quality_issues(),
+            "class_imbalance_report" : self.save_class_imbalance_report(),
+            "stage2_recommendations" : self.save_stage2_recommendations(),
+        }
+        self.output_images = output
+        return output
     
     def build_summary(self) -> dict[str, int | float | str]:         
         """Return key dataset summary statistics."""
 
         readable = self._require_readable_images()
-        return {
+        output = {
             "total_images": self._safe_int(len(readable)),
             "total_classes": self._safe_int(readable["label"].nunique()),
             "mean_width": self._safe_round(readable["width"].mean()),
@@ -67,6 +71,8 @@ class EDAService:
             "number_of_unreadable_files": int((~self.readable_dataframe["readable"]).sum()),
             "supported_file_types_found": str(", ".join(sorted(self.readable_dataframe["file_extension"].unique())))
             }
+        self.output_summery = output
+        return output
     
     def save_class_distribution(self) -> Path:         
         """Save a class-count chart for the dataset."""
