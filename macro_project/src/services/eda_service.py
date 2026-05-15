@@ -5,6 +5,19 @@ import seaborn as sns
 import numpy as np
 import cv2
 
+from ..config import (
+    CLASS_IMBALANCE_REPORT_PATH,
+    EDA_OUTPUT_DIR,
+    PIXEL_ANALYSIS_SAMPLE_SIZE,
+    QUALITY_ISSUES_PATH,
+    REPORT_OUTPUT_DIR,
+    SAMPLE_GRID_MAX_IMAGES,
+    STAGE2_RECOMMENDATIONS_PATH,
+    UNUSUAL_ASPECT_RATIO_HIGH,
+    UNUSUAL_ASPECT_RATIO_LOW,
+    VERY_SMALL_IMAGE_THRESHOLD,
+)
+
 class EDAService:
     """Generate and save EDA outputs for the indexed image dataset."""
     def __init__(self, dataframe: pd.DataFrame, output_dir: Path) -> None:
