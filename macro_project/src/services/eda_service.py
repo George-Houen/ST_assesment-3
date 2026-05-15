@@ -49,7 +49,7 @@ class EDAService:
     
 
     #following functions provided from Pranav by email with permision:
-    
+
     def generate_width_height_scatter_plot(self) -> Path:
         """Save a scatter plot of image width versus height."""
         readable = self._require_readable_images()
@@ -62,7 +62,7 @@ class EDAService:
         plt.legend(title="Class", bbox_to_anchor=(1.05, 1), loc="upper left")
         plt.tight_layout()
     
-        output_path = self.eda_output_dir / "width_height_scatter.png"
+        output_path = self.output_dir / "width_height_scatter.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -91,7 +91,7 @@ class EDAService:
     
         fig.suptitle("Representative Sample Images by Class")
         fig.tight_layout()
-        output_path = self.eda_output_dir / "sample_image_grid.png"
+        output_path = self.output_dir / "sample_image_grid.png"
         fig.savefig(output_path, dpi=150)
         plt.close(fig)
         return output_path
@@ -108,7 +108,7 @@ class EDAService:
         plt.xticks(rotation=35, ha="right")
         plt.tight_layout()
     
-        output_path = self.eda_output_dir / "width_by_class_boxplot.png"
+        output_path = self.output_dir / "width_by_class_boxplot.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -125,7 +125,7 @@ class EDAService:
         plt.xticks(rotation=35, ha="right")
         plt.tight_layout()
     
-        output_path = self.eda_output_dir / "height_by_class_boxplot.png"
+        output_path = self.output_dir / "height_by_class_boxplot.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
@@ -151,7 +151,7 @@ class EDAService:
         plt.ylabel("Frequency")
         plt.tight_layout()
     
-        output_path = self.eda_output_dir / "pixel_intensity_histogram.png"
+        output_path = self.output_dir / "pixel_intensity_histogram.png"
         plt.savefig(output_path, dpi=150)
         plt.close()
         return output_path
