@@ -39,9 +39,11 @@ class EDAService:
 
     def save_class_distribution(self) -> Path:         
         """Save a class-count chart for the dataset."""
+        readable = self._require_readable_images()
+
         plt.figure(figsize=(12, 6))         
-        order = self.readable_dataframe["label"].value_counts().index         
-        sns.countplot(data=self.readable_dataframe, x="label", order=order)         
+        order = readable["label"].value_counts().index         
+        sns.countplot(data=readable, x="label", order=order)         
         plt.xticks(rotation=90)         
         plt.title("Macroinvertebrate Images per Class")         
         plt.tight_layout()
@@ -51,9 +53,11 @@ class EDAService:
         return output_file_name
     def save_image_size_distribution(self) -> Path:         
         """Save width and height distribution charts."""
+        readable = self._require_readable_images()
+
         fig, axes = plt.subplots(1, 2, figsize=(12, 5))         
-        sns.histplot(self.filterd_dataframe["width"], bins=20, ax=axes[0]) #type: ignore    
-        sns.histplot(self.filterd_dataframe["height"], bins=20, ax=axes[1]) #type: ignore     
+        sns.histplot(readable["width"], bins=20, ax=axes[0]) #type: ignore    
+        sns.histplot(readable["height"], bins=20, ax=axes[1]) #type: ignore     
         axes[0].set_title("Image Width Distribution")         
         axes[1].set_title("Image Height Distribution")         
         plt.tight_layout()   
@@ -63,11 +67,20 @@ class EDAService:
         return output_file_name
     def build_summary(self) -> dict[str, float]:         
         """Return key dataset summary statistics."""
+
+        readable = self._require_readable_images()
         return {
             "total_images": int(len(self.filterd_dataframe)),
             "total_classes": int(self.filterd_dataframe["label"].nunique()),
             "mean_width": float(self.filterd_dataframe["width"].mean()),
-            "mean_height": float(self.filterd_dataframe["height"].mean()),}
+            "mean_height": float(self.filterd_dataframe["height"].mean()),
+            "min_width": self._safe_int(readable["width"].min()),
+            "max_width": self._safe_int(readable["width"].max()),
+            "min_height": self._safe_int(readable["height"].min()),
+            "max_height": self._safe_int(readable["height"].max()),
+            "number_of_unreadable_files": int((~self.dataframe["readable"]).sum()),
+            "supported_file_types_found": supported_types,
+            }
     
 
     #following functions provided from Pranav by email with permision:
