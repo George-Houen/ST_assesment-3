@@ -91,7 +91,7 @@ class App(tk.Tk):
 
         self.perform_eda_button = Button(self.class_select, command=self.run_eda)
         self.track_eda_counter = tk.StringVar(value="")
-        self.track_eda = Label(self.class_select)
+        self.track_eda = Label(self.class_select, textvariable=self.track_eda_counter)
 
         self.eda_output_images = Frame(self.page_eda)
         self.eda_output_images.grid(column = 0, row = 2, columnspan=2, sticky = "nsew")
