@@ -23,7 +23,7 @@ class App(tk.Tk):
 
         self.header = tk.Frame(self)
         self.header.grid(row=0, column=0, sticky="nsew")
-        self.body = tk.Frame(self)
+        self.body = ScrollFrame(self)
         self.body.grid(row=1, column=0, sticky="nsew")
         self.footer = tk.Frame(self)
         self.footer.grid(row=2, column=0, sticky="nsew")
@@ -36,11 +36,9 @@ class App(tk.Tk):
 
         self.nav_file_manager = tk.Button(self.header, text="manage files", command=lambda:self.switch_active_page(self.page_file_manager))
         self.nav_2 = tk.Button(self.header, text="EDA", command=lambda:self.switch_active_page(self.page_eda))
-        self.nav_3 = tk.Button(self.header, text="prediction", command=lambda:self.switch_active_page(self.page_3))
 
         self.nav_file_manager.grid(row=0, column=2)
         self.nav_2.grid(row=0, column=3)
-        self.nav_3.grid(row=0, column=4, sticky="e")
 
         #footer 
         self.footer.config(relief="raised", border=2)
@@ -54,15 +52,13 @@ class App(tk.Tk):
         self.body.config()
 
 
-        self.page_file_manager = tk.Frame(self.body, border=2)
-        self.page_eda = tk.Frame(self.body)
-        self.page_3 = tk.Frame(self.body, background="red")
+        self.page_file_manager = tk.Frame(self.body.main_frame, border=2)
+        self.page_eda = tk.Frame(self.body.main_frame)
 
         #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
             self.page_file_manager,
-            self.page_eda,
-            self.page_3
+            self.page_eda
         ]
         self.switch_active_page(self.page_file_manager) #set as default
 
@@ -72,31 +68,30 @@ class App(tk.Tk):
         self.page_eda.configure()
         self.page_eda.columnconfigure([0,1], weight=1, uniform="equal_cols")
         self.page_eda.rowconfigure(1, minsize=3)
-        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
-        self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
+        self.indexing_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_indexing)
+        self.indexing_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
 
         self.indexer_counter = tk.StringVar(value="dataset has not been indexed")
         self.index_count_label = tk.Label(self.page_eda, textvariable=self.indexer_counter)
         self.index_count_label.grid(column=1, row=0, sticky="ew")
 
-        self.data_frame: DataFrame | None
+        self.data_frame: DataFrame | None = None
 
         self.summery_box = tk.Frame(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
-        self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns", rowspan=2)
+        self.summery_box.grid(column=0, row=1, padx=3, pady=3, sticky="ns")
         self.summery_box.columnconfigure([0,1], weight=1)
         
         self.class_select = ClassSelect(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
         self.class_select.grid(column=1, row=1, padx=3, pady=3, sticky="ns")
 
-        self.perform_eda_button = Button(self.class_select, command=self.perform_eda)
+        self.perform_eda_button = Button(self.class_select, command=self.run_eda)
+        self.track_eda_counter = tk.StringVar(value="")
+        self.track_eda = Label(self.class_select, textvariable=self.track_eda_counter)
 
-        self.eda_class_drop_down = DropDown(self.page_eda,"class distrobution").cont_grid(column = 0, row = 2, columnspan=2, sticky = "ew")
-        self.eda_size_drop_down = DropDown(self.page_eda,"size distrobution").cont_grid(column = 0, row = 3, columnspan=2, sticky = "ew")
-
-        self.eda_class_distrobution_image = ImageLabel(self.eda_class_drop_down).grid(column = 0, row = 0, sticky="")
-        self.eda_size_distrobution_image = ImageLabel(self.eda_size_drop_down).grid(column = 0, row = 0, sticky="")
-
+        self.eda_output_images = Frame(self.page_eda)
+        self.eda_output_images.grid(column = 0, row = 2, columnspan=2, sticky = "nsew")
+        self.eda_output_images.columnconfigure((0,1), weight=1)
 
         #file control page
 
@@ -111,13 +106,13 @@ class App(tk.Tk):
         )
 
 
-    def display_eda_summery(self, results : dict[str, float]) -> None:
+    def display_eda_summery(self, results : dict[str, float | int | str]) -> None:
         for child in self.summery_box.winfo_children():
             child.destroy()
         i = 0
         for k,v in results.items():
             tk.Label(self.summery_box, text=k).grid(row=i, column=0)
-            tk.Label(self.summery_box, text=round(v, 2)).grid(row=i, column=2)
+            tk.Label(self.summery_box, text=v).grid(row=i, column=2)
             i+=1
         tk.Frame( #vertical culumn serperator
                 self.summery_box,
@@ -140,7 +135,7 @@ class App(tk.Tk):
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
-    def run_eda(self):
+    def run_indexing(self):
         print("start indexing")
         thread = Thread(
             target=lambda:self.indexer.build_dataframe(
@@ -163,21 +158,46 @@ class App(tk.Tk):
         print(self.data_frame.columns.to_list())
         self.class_select.generate_manual(list(self.data_frame["label"]))
         self.perform_eda_button.grid(column=0, sticky="nsew")
+        self.track_eda.grid(column=0, sticky="nsew")
 
         
     
-    def perform_eda(self):
+    def run_eda(self):
+        for i in self.eda_output_images.winfo_children():
+            i.destroy()
         if type(self.data_frame) != DataFrame:
             print(self.data_frame, type(self.data_frame))
             raise TypeError (self.data_frame, type(self.data_frame))
         
-        self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR)
+        self.eda_service = EDAService(self.data_frame, config.EDA_OUTPUT_DIR, config.REPORT_OUTPUT_DIR)
         self.eda_service.filter_data_frame(self.class_select.get())
+
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
-        EDA_IMAGE_SIZE = {"width": 500, "height": None}
-        self.eda_class_distrobution_image.set_image(self.eda_service.save_class_distribution(), **EDA_IMAGE_SIZE)
-        self.eda_size_distrobution_image.set_image(self.eda_service.save_image_size_distribution(), **EDA_IMAGE_SIZE)
+    
+        thread = Thread(
+            target=lambda:self.eda_service.save_all(
+                lambda:self.after( 2, func = lambda:self.track_eda_counter.set(f"currently processing: {self.eda_service.track_save_all_progress}")),
+                lambda: self.after( 2,
+                    self.finished_eda
+                )
+            )
+        )
+        thread.start()
+    
+    def generate_eda_dropdown(self, title, path):
+        drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
+        image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
+        image.set_image(path, **config.EDA_IMAGE_SIZE)
+
+    def finished_eda(self):
+        self.track_eda_counter.set("eda complete")
+        image_paths = self.eda_service.output_images
+        
+        for title, path in image_paths.items():
+            self.generate_eda_dropdown(title, path)
+            
+        
 
 
 if __name__ == "__main__":

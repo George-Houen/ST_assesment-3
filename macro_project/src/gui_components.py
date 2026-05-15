@@ -1,4 +1,15 @@
-from tkinter import (Label, Button, Frame, filedialog, OptionMenu, StringVar, Checkbutton, IntVar)
+from tkinter import (
+    Label, 
+    Button, 
+    Frame, 
+    filedialog, 
+    OptionMenu, 
+    StringVar, 
+    Checkbutton, 
+    IntVar,
+    Canvas
+    )
+from tkinter import ttk
 from typing import Self
 from PIL import Image, ImageTk
 from pathlib import Path
@@ -28,7 +39,7 @@ class ImageLabel(Label):
 
         self.resize(height= height, width= width)
         self.image_render = ImageTk.PhotoImage(self.image_data)
-        self.configure(image=self.image_render)
+        self.configure(image=self.image_render, anchor="center")
         """ removing cos it is so freaking broken
         self.bind("<Configure>", self.auto_resize)
         """
@@ -62,10 +73,10 @@ class DropDown(Frame):
     def __init__(self, root, text="drop down", *args, **kwargs):
         self.container = Frame(root)
         self.container.columnconfigure(0, weight=1)
-        self.container.rowconfigure(1, minsize=10)
+        self.container.rowconfigure(1)
         super().__init__(master = self.container, *args, **kwargs)
         self.config(background="grey")
-        self.columnconfigure(0, weight=0)
+        self.columnconfigure(0, weight=1)
         self.header = Button(self.container, text=text, command=self.header_press, background="yellow")
         self.header.grid(row=0, column=0, sticky="nsew")
         self.state_expanded : bool = False
@@ -196,3 +207,26 @@ class ClassSelect(Frame):
             if v[1].get()==1:
                 final.append(k)
         return final
+    
+class ScrollFrame(Frame):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rowconfigure(0, weight=1)
+        self.canvas = Canvas(self)
+        self.canvas.grid(row=0, column=0, sticky="nsew")
+        self.scroll_bar = ttk.Scrollbar(self)
+        self.scroll_bar.grid(row=0, column=1, sticky="nsew")
+        self.columnconfigure(0, weight=1)
+        self.canvas.configure(yscrollcommand=self.scroll_bar.set)
+
+        self.main_frame = Frame(self.canvas)
+        self.main_frame.bind(
+            "<Configure>",
+            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        )
+        self.canvas.create_window((0, 0), window=self.main_frame, anchor="nw")
+
+        def _on_mousewheel(event):
+            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
