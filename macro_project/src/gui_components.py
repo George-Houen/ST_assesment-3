@@ -211,6 +211,7 @@ class ClassSelect(Frame):
 class ScrollFrame(Frame):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.rowconfigure(0, weight=1)
         self.canvas = Canvas(self)
         self.canvas.grid(row=0, column=0, sticky="nsew")
         self.scroll_bar = ttk.Scrollbar(self)
@@ -224,3 +225,8 @@ class ScrollFrame(Frame):
             lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
         )
         self.canvas.create_window((0, 0), window=self.main_frame, anchor="nw")
+
+        def _on_mousewheel(event):
+            self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
