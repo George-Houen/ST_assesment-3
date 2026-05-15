@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 import cv2
+from typing import Callable
 
 from config import (
     CLASS_IMBALANCE_REPORT_PATH,
@@ -33,6 +34,7 @@ class EDAService:
 
         self.output_summery: dict[str, int | float | str] = {}
         self.output_images:dict[str, Path] = {}
+        self.track_save_all_progress : str = ""
     
     def filter_data_frame(self, labels:list[str]):
         print(labels)
@@ -40,19 +42,27 @@ class EDAService:
         readable_mask = self.base_dataframe["readable"].astype(bool)
         self.readable_dataframe = self.filterd_dataframe[readable_mask]
     
-    def save_all(self) -> dict[str, Path]:
-        output = {
-            "class_distribution" : self.save_class_distribution(),
-            "image_size_distribution" : self.save_image_size_distribution(),
-            "width_height_scatter_plot" : self.save_width_height_scatter_plot(),
-            "sample_image_grid" : self.save_sample_image_grid(),
-            "height_by_class_boxplot" : self.save_height_by_class_boxplot(),
-            "pixel_intensity_histogram" : self.save_pixel_intensity_histogram(),
-            "image_quality_issues" : self.save_image_quality_issues(),
-            "class_imbalance_report" : self.save_class_imbalance_report(),
-            "stage2_recommendations" : self.save_stage2_recommendations(),
+    def save_all(self, func_each : Callable | None = None, func_end: Callable | None = None) -> dict[str, Path]:
+        operations = {
+            "class_distribution" : self.save_class_distribution,
+            "image_size_distribution" : self.save_image_size_distribution,
+            "width_height_scatter_plot" : self.save_width_height_scatter_plot,
+            "sample_image_grid" : self.save_sample_image_grid,
+            "height_by_class_boxplot" : self.save_height_by_class_boxplot,
+            "pixel_intensity_histogram" : self.save_pixel_intensity_histogram,
+            "image_quality_issues" : self.save_image_quality_issues,
+            "class_imbalance_report" : self.save_class_imbalance_report,
+            "stage2_recommendations" : self.save_stage2_recommendations,
         }
+
+        output = {}
+        for title, func in operations.items():
+            self.track_save_all_progress = "processing: "+title
+            if func_each is not None:
+                func_each()
+            output[title]=func()
         self.output_images = output
+        if func_end:func_end()
         return output
     
     def build_summary(self) -> dict[str, int | float | str]:         
@@ -71,7 +81,7 @@ class EDAService:
             "number_of_unreadable_files": int((~self.readable_dataframe["readable"]).sum()),
             "supported_file_types_found": str(", ".join(sorted(self.readable_dataframe["file_extension"].unique())))
             }
-        self.output_summery = output
+        self.output_summery
         return output
     
     def save_class_distribution(self) -> Path:         

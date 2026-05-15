@@ -72,7 +72,7 @@ class App(tk.Tk):
         self.page_eda.configure()
         self.page_eda.columnconfigure([0,1], weight=1, uniform="equal_cols")
         self.page_eda.rowconfigure(1, minsize=3)
-        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_eda)
+        self.eda_refresh_button = tk.Button(self.page_eda, text="refresh", command=self.run_indexing)
         self.eda_refresh_button.grid(column=0, row=0, sticky="ew")
         self.indexer = DatasetIndexer()
 
@@ -137,17 +137,9 @@ class App(tk.Tk):
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
-    def run_eda(self):
+    def run_indexing(self):
         print("start indexing")
-        thread = Thread(
-            target=lambda:self.indexer.build_dataframe(
-                lambda:self.after( 2, func = lambda:self.indexer_counter.set(f"{self.indexer.counter} files indexed.")),
-                lambda: self.after( 2,
-                    self.finished_indexing
-                )
-            )
-        )
-        thread.start()
+        
         
 
     def finished_indexing(self):
@@ -163,7 +155,7 @@ class App(tk.Tk):
 
         
     
-    def perform_eda(self):
+    def run_eda(self):
         if type(self.data_frame) != DataFrame:
             print(self.data_frame, type(self.data_frame))
             raise TypeError (self.data_frame, type(self.data_frame))
@@ -173,8 +165,20 @@ class App(tk.Tk):
 
         eda_summery = self.eda_service.build_summary()
         self.display_eda_summery(eda_summery)
+    
+        thread = Thread(
+            target=lambda:self.eda_service.save_all(
+                lambda:self.after( 2, func = lambda:self.indexer_counter.set(f"{self.indexer.counter} files indexed.")),
+                lambda: self.after( 2,
+                    self.finished_indexing
+                )
+            )
+        )
+        thread.start()
+        
 
-        image_paths = self.eda_service.save_all()
+    def finished_eda(self):
+        image_paths = self.eda_service.output_images
         EDA_IMAGE_SIZE = {"width": 500, "height": None}
         for i in self.eda_output_images.winfo_children():
             i.destroy()
