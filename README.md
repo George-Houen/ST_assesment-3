@@ -14,4 +14,4 @@ From there you can click on each graph option to toggle its visibility.
 Once you have the project installed, you'll need to make sure you have all the python libraries listed in 'requirements.txt' (pathlib, dataclasses, pandas, opencv-python, matplotlib, seaborn, tkinter, joblib, typing, pillow, shutil, threading) installed, which can be done by entering 'pip install [library name here]' into the command shell.
 
 After that, you should be good to go! Just run 'main.py' and you're off.
-(Side note: windows users *may* need to replace line 5 of 'main.py' ("import macro_project.src.gui as gui") with "import gui as gui")
+(Side note: windows users *may* need to replace line 1 of 'main.py' ("import macro_project.src.gui as gui") with "import gui as gui")
