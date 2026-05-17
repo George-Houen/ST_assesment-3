@@ -424,12 +424,6 @@ class EDAService:
             "be compared against colour-based inputs."
         )
     
-    def _format_class_counts(self, class_counts: pd.Series[Any]) -> str:
-        """Format class counts into a readable summary value."""
-        return "; ".join(
-            f"{label}: {count}" for label, count in class_counts.items()
-        )
-    
     def _safe_round(self, value: float) -> float:
         """Round a numeric value while handling missing data."""
         if pd.isna(value): #type: ignore
