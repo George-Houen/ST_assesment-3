@@ -11,7 +11,7 @@ class DatasetIndexer:
         self.data_dir = data_dir
         self.counter :int = 0
         self.output: pd.DataFrame | None = None
-    def build_dataframe(self, func : Callable[[], None] | None = None, final : Callable[[], None] | None = None) -> pd.DataFrame:
+    def build_dataframe(self, func : Callable[[], None| Any] | None = None, final : Callable[[], None | Any] | None = None) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
         records : list[dict[Any, Any]] = []
 
