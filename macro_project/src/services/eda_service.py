@@ -58,7 +58,7 @@ class EDAService:
             "class_distribution" : self.save_class_distribution,
             "image_size_distribution" : self.save_image_size_distribution,
             "width_height_scatter_plot" : self.save_width_height_scatter_plot,
-            "sample_image_grid" : self.save_sample_image_grid,
+            "width_by_class_boxplot" : self.save_sample_image_grid,
             "height_by_class_boxplot" : self.save_height_by_class_boxplot,
             #"pixel_intensity_histogram" : self.save_pixel_intensity_histogram,
         }
