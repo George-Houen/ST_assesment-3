@@ -25,7 +25,10 @@ from utils.file_utils import ensure_directory
 
 class EDAService:
     """Generate and save EDA outputs for the indexed image dataset."""
+
     def __init__(self, dataframe: pd.DataFrame, output_dir_eda: Path, output_dir_report: Path) -> None:
+        """initialises the data frame"""
+
         self.base_dataframe : pd.DataFrame = dataframe         
         self.output_dir_eda = output_dir_eda
         self.output_dir_report = output_dir_report
@@ -41,12 +44,16 @@ class EDAService:
         self.track_save_all_progress : str = ""
     
     def filter_data_frame(self, labels:list[str]):
+        """filters the data frame"""
+
         print(labels)
         self.filterd_dataframe = self.base_dataframe[self.base_dataframe["label"].isin(labels)]
         readable_mask = self.base_dataframe["readable"].astype(bool)
         self.readable_dataframe = self.filterd_dataframe[readable_mask]
     
     def save_all(self, func_each : Callable | None = None, func_end: Callable | None = None) -> dict[str, Path]:
+        """saves all the operation data"""
+
         operations = {
             "class_distribution" : self.save_class_distribution,
             "image_size_distribution" : self.save_image_size_distribution,
