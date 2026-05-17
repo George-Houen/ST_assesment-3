@@ -10,7 +10,7 @@ from tkinter import (
     Canvas
     )
 from tkinter import ttk
-from typing import Self
+from typing import Self, Any
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
@@ -20,7 +20,7 @@ from shutil import copy
 class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args : Any, **kwargs : Any):
         super().__init__(*args, **kwargs)
 
         #prevents garbage collection fucking up the whole thing:
@@ -28,7 +28,7 @@ class ImageLabel(Label):
         self.image_data = None
         self.image_render = None
         self.grid_propagate(False)
-    def grid(self, *args, **kwargs) -> Self:
+    def grid(self, *args : Any, **kwargs : Any) -> Self:
         super().grid(*args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
     def set_image(self, image: Path, height: int | None = None, width: int | None = None):
@@ -84,10 +84,10 @@ class DropDown(Frame):
         Frame.grid(self, row=1, column=0, sticky="nsew")
     def close(self):
         Frame.grid_forget(self)
-    def cont_grid(self, *args, **kwargs):
+    def cont_grid(self, *args : Any, **kwargs : Any):
         self.container.grid(*args, **kwargs)
         return self
-    def cont_grid_forget(self, *args, **kwargs) -> Self:
+    def cont_grid_forget(self, *args : Any, **kwargs : Any) -> Self:
         self.container.grid_forget(*args, **kwargs)
         return self
     def header_press(self):
@@ -160,7 +160,7 @@ class MoveFileButton(Button):
         return self
     
 class ClassSelect(Frame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args : Any, **kwargs : Any):
         super().__init__(*args, **kwargs)
         self.all_checked = IntVar(self)
         self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all", command=self.toggle_all)
@@ -209,7 +209,7 @@ class ClassSelect(Frame):
         return final
     
 class ScrollFrame(Frame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args : Any, **kwargs : Any):
         super().__init__(*args, **kwargs)
         self.rowconfigure(0, weight=1)
         self.canvas = Canvas(self)
