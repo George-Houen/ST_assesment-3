@@ -55,7 +55,7 @@ class App(tk.Tk):
         self.page_file_manager = tk.Frame(self.body.main_frame, border=2)
         self.page_eda = tk.Frame(self.body.main_frame)
 
-        #this crap below is weird because i wanted to unpack multiple at once without a stupid if else stack
+        #this stuff below is weird because i wanted to unpack multiple at once without a stupid if else stack
         self.pages : list[tk.Frame] = [
             self.page_file_manager,
             self.page_eda
@@ -107,6 +107,8 @@ class App(tk.Tk):
 
 
     def display_eda_summery(self, results : dict[str, float | int | str]) -> None:
+        """displays the given results to the interface"""
+
         for child in self.summery_box.winfo_children():
             child.destroy()
         i = 0
@@ -136,6 +138,8 @@ class App(tk.Tk):
             raise ValueError("page to be opened should be in body and self.pages")
 
     def run_indexing(self) -> None:
+        """performs the indexing process, using multiple threads for increased speed"""
+
         print("start indexing")
         thread = Thread(
             target=lambda:self.indexer.build_dataframe(
@@ -149,6 +153,8 @@ class App(tk.Tk):
         
 
     def finished_indexing(self) -> None:
+        """finalises the indexing process, storing all the data"""
+
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
@@ -163,6 +169,8 @@ class App(tk.Tk):
         
     
     def run_eda(self) -> None:
+        """performs the eda and produces a summary of the results"""
+
         for i in self.eda_output_images.winfo_children():
             i.destroy()
         if type(self.data_frame) != DataFrame:
@@ -185,12 +193,16 @@ class App(tk.Tk):
         )
         thread.start()
     
-    def generate_eda_dropdown(self, title : str, path : Path) -> None:
+    def generate_eda_dropdown(self, title : str, path : Path) -> None):
+        """creates a dropdown based on the given eda input"""
+
         drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
         image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
         image.set_image(path, **config.EDA_IMAGE_SIZE)
 
     def finished_eda(self):
+        """finalises the eda process, linking all the outputs into a dropdown"""
+
         self.track_eda_counter.set("eda complete")
         image_paths = self.eda_service.output_images
         

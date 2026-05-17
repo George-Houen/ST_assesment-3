@@ -23,18 +23,25 @@ class ImageLabel(Label):
     """this is a class for images. it is a Label so that it can support multiple image file types
     """
     def __init__(self, *args : Any, **kwargs : Any):
+        """initialise the gui components"""
+
         super().__init__(*args, **kwargs)
 
-        #prevents garbage collection fucking up the whole thing:
+        #prevents garbage collection messing up the whole thing:
         self.root_image_data = None
         self.image_data = None
         self.image_render = None
         self.grid_propagate(False)
 
     def grid(self, *args : Any, **kwargs : Any) -> Self:
+        """adds a grid to the interface, whilst returning itself to allow the chaining of methods more efficiently"""
+
         super().grid(*args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
+    
     def set_image(self, image: Path, height: int | None = None, width: int | None = None):
+        """shows the inputted in the gui"""
+
         #image_data and image_render are used from pillow to help for all image types
         #currently all images should be png, but its future proofing
         self.root_image_data = Image.open(image)
@@ -43,16 +50,19 @@ class ImageLabel(Label):
         self.resize(height= height, width= width)
         self.image_render = ImageTk.PhotoImage(self.image_data)
         self.configure(image=self.image_render, anchor="center")
-        """ removing cos it is so freaking broken
-        self.bind("<Configure>", self.auto_resize)
-        """
+        
+        #self.bind("<Configure>", self.auto_resize) #removed due to being broken
+
 
     def auto_resize(self, event : Event) -> None:
+        """resizes the interface to the event size, reporting said size afterwards"""
         self.resize(event.width, event.height)
         print(event.width, event.height)
         
     
     def resize(self, height: int | None = None, width: int | None = None) -> None:
+        """resizes the interface to the given size"""
+
         if self.root_image_data:
             w_over_h_ratio = self.root_image_data.width / self.root_image_data.height
             if width and height:
@@ -72,7 +82,11 @@ class ImageLabel(Label):
 
 
 class DropDown(Frame):
+    """this class handles the dropdown section of the interface"""
+
     def __init__(self, root : Widget, text : str="drop down",*args : Any, **kwargs : Any) -> None:
+        """initialises the dropdown"""
+
         self.container = Frame(root)
         self.container.columnconfigure(0, weight=1)
         self.container.rowconfigure(1)
@@ -82,17 +96,32 @@ class DropDown(Frame):
         self.header = Button(self.container, text=text, command=self.header_press, background="yellow")
         self.header.grid(row=0, column=0, sticky="nsew")
         self.state_expanded : bool = False
+
     def open(self) -> None:
+        """opens the inputted dropdown"""
+
         Frame.grid(self, row=1, column=0, sticky="nsew")
+
     def close(self)-> None:
+        """closes the inputted dropdown"""
+
         Frame.grid_forget(self)
+
     def cont_grid(self, *args : Any, **kwargs : Any) -> Self:
+        """creates a container grid"""
+
         self.container.grid(*args, **kwargs)
         return self
+    
     def cont_grid_forget(self, *args : Any, **kwargs : Any) -> Self:
+        """removes a container grid"""
+
         self.container.grid_forget(*args, **kwargs)
         return self
+    
     def header_press(self) -> None:
+        """toggles the header state"""
+
         if not self.state_expanded:
             self.open()
             self.state_expanded = True
@@ -103,71 +132,106 @@ class DropDown(Frame):
 
 
 class FileChoiceButton(Button):
+    """this class contains the file selection button"""
+
     def __init__(self, root : Widget, after_command : Callable[[], Any] | None = None,*args : Any, **kwargs : Any):
+        """initialises the button"""
+
         super().__init__(root, *args, **kwargs)
         self.config(text="upload file")
-        self.config(command=self.onlick)
+        self.config(command=self.onclick)
         self.selected_file = None
         self.after_command = after_command
 
     def onlick(self) -> None:
+        """triggers the upload of a file when the button is clicked"""
+
         self.selected_file = self.upload_file()
         if self.after_command:
             self.after_command()
     
     def grid(self, **kwargs : Any) -> Self:
+        """creates a grid"""
+
         super().grid(**kwargs)
         return self
     
     def get_file_fir(self) -> str | None:
+        """returns the selected file"""
+
         return self.selected_file
     
     def upload_file(self) -> str:
-        # Opens a file dialog and returns the selected file's path
-        file_path : str = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
+        """opens a file dialog and returns the selected file's path"""
+
+        file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
         if file_path:
             print(f"Selected file: {file_path}")
         return file_path
 
 
 class FolderSelect(OptionMenu):
+    """this class handles the folder menu"""
+
     def __init__(self, root : Widget,*args : Any, **kwargs : Any):
-        self.folders : list[str] = []
+        """initialises the menu"""
+        
+        self.folders = []
         self.find_folders()
         self.current_value = StringVar(root)
         self.current_value.set(self.folders[0])
         super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
 
     def find_folders(self) -> None:
+        """finds all the folders in the current directory"""
+
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         self.folders = [f.name for f in path.iterdir() if f.is_dir()]
 
     def grid(self, **kwargs : Any) -> Self:
+        """creates a grid"""
+
         super().grid(**kwargs)
         return self
 
 class MoveFileButton(Button):
+    """this class handles the move file button"""
+
     def __init__(self,root : Widget,  file_choice: FileChoiceButton, folder_select:FolderSelect,*args : Any, **kwargs : Any):
+        """initialises the button"""
+
         super().__init__(root, *args, **kwargs)
         self.config(command=self.onclick, text="upload")
         self.file_choice = file_choice
         self.folder_select = folder_select
+
     def onclick(self):
-        if self.file_choice.selected_file:
+        """selects a file when the button is clicked"""
+
+        if self.file_choice.selected_file: #only triggers if a file has been selected
             copy(self.file_choice.selected_file, RAW_DATA_DIR/"stream_macroinvertebrates"/self.folder_select.current_value.get())
             print(self.folder_select.current_value.get())
+
     def grid(self, **kwargs : Any) -> Self:
+        """creates a grid"""
+
         super().grid(**kwargs)
         return self
     
 class ClassSelect(Frame):
+    """this class handles the selection of data category classes to display analysis for"""
+
     def __init__(self, *args : Any, **kwargs : Any):
+        """sets up the selection interface"""
+
         super().__init__(*args, **kwargs)
         self.all_checked = IntVar(self)
         self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all", command=self.toggle_all)
         self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
     
     def clear(self) -> None:
+        """clears the selected choices"""
+
         for i in self.inputs.values():
             i[0].destroy()
         self.inputs = {}
@@ -176,6 +240,8 @@ class ClassSelect(Frame):
         return
     
     def generate_manual(self, folders: list[str]|list[Path]) -> None:
+        """collects the datasets of the selected classes"""
+
         self.clear()
         self.all_checked_button.grid(row=0, column=0, sticky="w")
         self.all_checked.set(1)
@@ -186,11 +252,15 @@ class ClassSelect(Frame):
             value[0].grid(row = 1+index, column=0, sticky="w")
 
     def generate_auto_dir(self) -> None:
+        """collects the paths to the folders of the selected classes"""
+
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         folders = [f.name for f in path.iterdir() if f.is_dir()]
         self.generate_manual(folders)
 
     def update_all_checked_passive(self) -> None:
+        """updates the state of the 'all' selection option"""
+
         for i in self.inputs.values():
             if i[1].get() == 0:
                 self.all_checked.set(0)
@@ -198,19 +268,27 @@ class ClassSelect(Frame):
         self.all_checked.set(1)
 
     def toggle_all(self) -> None:
+        """toggles all the selection options based on the 'all' selection status"""
+
         checked = self.all_checked.get()
         for i in self.inputs.values():
             i[1].set(checked)
 
     def get(self) -> list[str]:
-        final : list[str] = []
+        """returns the selected classes"""
+
+        final = []
         for k, v in self.inputs.items():
             if v[1].get()==1:
                 final.append(k)
         return final
     
 class ScrollFrame(Frame):
+    """this is a class for scroll bar, which enables the viewing of all eda data if it doesn't fit in the window"""
+
     def __init__(self, *args : Any, **kwargs : Any):
+        """initialises the scroll bar"""
+
         super().__init__(*args, **kwargs)
         self.rowconfigure(0, weight=1)
         self.canvas = Canvas(self)
@@ -228,6 +306,8 @@ class ScrollFrame(Frame):
         self.canvas.create_window((0, 0), window=self.main_frame, anchor="nw")
 
         def _on_mousewheel(event : Event):
+            """scrolls the interface when triggered by the mousewheel"""
+
             self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         
         self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
