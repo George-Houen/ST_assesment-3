@@ -7,10 +7,12 @@ from tkinter import (
     StringVar, 
     Checkbutton, 
     IntVar,
-    Canvas
+    Canvas,
+    Event,
+    Widget
     )
 from tkinter import ttk
-from typing import Self, Any
+from typing import Self, Any, Callable
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
@@ -44,8 +46,7 @@ class ImageLabel(Label):
         self.bind("<Configure>", self.auto_resize)
         """
 
-
-    def auto_resize(self, event):
+    def auto_resize(self, event : Event):
         self.resize(event.width, event.height)
         print(event.width, event.height)
         
@@ -70,7 +71,7 @@ class ImageLabel(Label):
 
 
 class DropDown(Frame):
-    def __init__(self, root, text="drop down", *args, **kwargs):
+    def __init__(self, root : Widget, text : str="drop down",*args : Any, **kwargs : Any):
         self.container = Frame(root)
         self.container.columnconfigure(0, weight=1)
         self.container.rowconfigure(1)
@@ -101,7 +102,7 @@ class DropDown(Frame):
 
 
 class FileChoiceButton(Button):
-    def __init__(self, root, after_command = None, *args, **kwargs):
+    def __init__(self, root : Widget, after_command : Callable[[], Any] | None = None,*args : Any, **kwargs : Any):
         super().__init__(root, *args, **kwargs)
         self.config(text="upload file")
         self.config(command=self.onlick)
@@ -113,7 +114,7 @@ class FileChoiceButton(Button):
         if self.after_command:
             self.after_command()
     
-    def grid(self, **kwargs) -> Self:
+    def grid(self, **kwargs : Any) -> Self:
         super().grid(**kwargs)
         return self
     
@@ -129,7 +130,7 @@ class FileChoiceButton(Button):
 
 
 class FolderSelect(OptionMenu):
-    def __init__(self, root, *args, **kwargs):
+    def __init__(self, root : Widget,*args : Any, **kwargs : Any):
         self.folders = []
         self.find_folders()
         self.current_value = StringVar(root)
@@ -145,7 +146,7 @@ class FolderSelect(OptionMenu):
         return self
 
 class MoveFileButton(Button):
-    def __init__(self,root,  file_choice: FileChoiceButton, folder_select:FolderSelect, *args, **kwargs):
+    def __init__(self,root : Widget,  file_choice: FileChoiceButton, folder_select:FolderSelect,*args : Any, **kwargs : Any):
         super().__init__(root, *args, **kwargs)
         self.config(command=self.onclick, text="upload")
         self.file_choice = file_choice
