@@ -16,7 +16,7 @@ from typing import Self, Any, Callable
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
-from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR
+from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR #type: ignore. i know ist not used, but if i remove it ill be confused when i try to implement it
 from shutil import copy
 
 class ImageLabel(Label):
@@ -30,6 +30,7 @@ class ImageLabel(Label):
         self.image_data = None
         self.image_render = None
         self.grid_propagate(False)
+
     def grid(self, *args : Any, **kwargs : Any) -> Self:
         super().grid(*args, **kwargs)
         return self #so that we can chain the methods and i dont have to have a bunch of extra lines to grid
@@ -46,12 +47,12 @@ class ImageLabel(Label):
         self.bind("<Configure>", self.auto_resize)
         """
 
-    def auto_resize(self, event : Event):
+    def auto_resize(self, event : Event) -> None:
         self.resize(event.width, event.height)
         print(event.width, event.height)
         
     
-    def resize(self, height: int | None = None, width: int | None = None):
+    def resize(self, height: int | None = None, width: int | None = None) -> None:
         if self.root_image_data:
             w_over_h_ratio = self.root_image_data.width / self.root_image_data.height
             if width and height:
@@ -71,7 +72,7 @@ class ImageLabel(Label):
 
 
 class DropDown(Frame):
-    def __init__(self, root : Widget, text : str="drop down",*args : Any, **kwargs : Any):
+    def __init__(self, root : Widget, text : str="drop down",*args : Any, **kwargs : Any) -> None:
         self.container = Frame(root)
         self.container.columnconfigure(0, weight=1)
         self.container.rowconfigure(1)
@@ -81,17 +82,17 @@ class DropDown(Frame):
         self.header = Button(self.container, text=text, command=self.header_press, background="yellow")
         self.header.grid(row=0, column=0, sticky="nsew")
         self.state_expanded : bool = False
-    def open(self):
+    def open(self) -> None:
         Frame.grid(self, row=1, column=0, sticky="nsew")
-    def close(self):
+    def close(self)-> None:
         Frame.grid_forget(self)
-    def cont_grid(self, *args : Any, **kwargs : Any):
+    def cont_grid(self, *args : Any, **kwargs : Any) -> Self:
         self.container.grid(*args, **kwargs)
         return self
     def cont_grid_forget(self, *args : Any, **kwargs : Any) -> Self:
         self.container.grid_forget(*args, **kwargs)
         return self
-    def header_press(self):
+    def header_press(self) -> None:
         if not self.state_expanded:
             self.open()
             self.state_expanded = True
@@ -109,7 +110,7 @@ class FileChoiceButton(Button):
         self.selected_file = None
         self.after_command = after_command
 
-    def onlick(self):
+    def onlick(self) -> None:
         self.selected_file = self.upload_file()
         if self.after_command:
             self.after_command()
@@ -118,12 +119,12 @@ class FileChoiceButton(Button):
         super().grid(**kwargs)
         return self
     
-    def get_file_fir(self):
+    def get_file_fir(self) -> str | None:
         return self.selected_file
     
-    def upload_file(self):
+    def upload_file(self) -> str:
         # Opens a file dialog and returns the selected file's path
-        file_path = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
+        file_path : str = filedialog.askopenfilename()#filetypes=SUPPORTED_EXTENSIONS)
         if file_path:
             print(f"Selected file: {file_path}")
         return file_path
@@ -131,17 +132,17 @@ class FileChoiceButton(Button):
 
 class FolderSelect(OptionMenu):
     def __init__(self, root : Widget,*args : Any, **kwargs : Any):
-        self.folders = []
+        self.folders : list[str] = []
         self.find_folders()
         self.current_value = StringVar(root)
         self.current_value.set(self.folders[0])
         super().__init__(root, self.current_value, *self.folders, *args, **kwargs)
 
-    def find_folders(self):
+    def find_folders(self) -> None:
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         self.folders = [f.name for f in path.iterdir() if f.is_dir()]
 
-    def grid(self, **kwargs) -> Self:
+    def grid(self, **kwargs : Any) -> Self:
         super().grid(**kwargs)
         return self
 
@@ -155,8 +156,7 @@ class MoveFileButton(Button):
         if self.file_choice.selected_file:
             copy(self.file_choice.selected_file, RAW_DATA_DIR/"stream_macroinvertebrates"/self.folder_select.current_value.get())
             print(self.folder_select.current_value.get())
-        print("test 2")
-    def grid(self, **kwargs) -> Self:
+    def grid(self, **kwargs : Any) -> Self:
         super().grid(**kwargs)
         return self
     
@@ -167,7 +167,7 @@ class ClassSelect(Frame):
         self.all_checked_button = Checkbutton(self, variable=self.all_checked, text="all", command=self.toggle_all)
         self.inputs: dict[str, tuple[Checkbutton, IntVar]] = {}
     
-    def clear(self):
+    def clear(self) -> None:
         for i in self.inputs.values():
             i[0].destroy()
         self.inputs = {}
@@ -175,7 +175,7 @@ class ClassSelect(Frame):
         self.all_checked_button.grid_forget()
         return
     
-    def generate_manual(self, folders: list[str]|list[Path]):
+    def generate_manual(self, folders: list[str]|list[Path]) -> None:
         self.clear()
         self.all_checked_button.grid(row=0, column=0, sticky="w")
         self.all_checked.set(1)
@@ -185,25 +185,25 @@ class ClassSelect(Frame):
         for index, value in enumerate(self.inputs.values()):
             value[0].grid(row = 1+index, column=0, sticky="w")
 
-    def generate_auto_dir(self):
+    def generate_auto_dir(self) -> None:
         path = RAW_DATA_DIR/"stream_macroinvertebrates"
         folders = [f.name for f in path.iterdir() if f.is_dir()]
         self.generate_manual(folders)
 
-    def update_all_checked_passive(self):
+    def update_all_checked_passive(self) -> None:
         for i in self.inputs.values():
             if i[1].get() == 0:
                 self.all_checked.set(0)
                 return
         self.all_checked.set(1)
 
-    def toggle_all(self):
+    def toggle_all(self) -> None:
         checked = self.all_checked.get()
         for i in self.inputs.values():
             i[1].set(checked)
 
-    def get(self):
-        final = []
+    def get(self) -> list[str]:
+        final : list[str] = []
         for k, v in self.inputs.items():
             if v[1].get()==1:
                 final.append(k)
@@ -227,7 +227,7 @@ class ScrollFrame(Frame):
         )
         self.canvas.create_window((0, 0), window=self.main_frame, anchor="nw")
 
-        def _on_mousewheel(event):
+        def _on_mousewheel(event : Event):
             self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         
         self.canvas.bind_all("<MouseWheel>", _on_mousewheel)
