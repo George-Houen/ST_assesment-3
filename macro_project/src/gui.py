@@ -46,7 +46,6 @@ class App(tk.Tk):
 
         tk.Label(self.footer, text="u3324971").grid(row=0, column=0)
         tk.Label(self.footer, text="u3334568").grid(row=1, column=0)
-        tk.Button(self.footer, text="appendix").grid(row=0, column=1, sticky="e") # TODO: currently doesnt have any function to it
 
         #body
         self.body.config()
