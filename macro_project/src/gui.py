@@ -193,7 +193,7 @@ class App(tk.Tk):
         )
         thread.start()
     
-    def generate_eda_dropdown(self, title : str, path : Path) -> None):
+    def generate_eda_dropdown(self, title : str, path : Path) -> None:
         """creates a dropdown based on the given eda input"""
 
         drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
