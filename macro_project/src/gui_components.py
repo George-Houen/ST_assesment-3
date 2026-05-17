@@ -139,7 +139,7 @@ class FileChoiceButton(Button):
 
         super().__init__(root, *args, **kwargs)
         self.config(text="upload file")
-        self.config(command=self.onclick)
+        self.config(command=self.onlick)
         self.selected_file = None
         self.after_command = after_command
 
