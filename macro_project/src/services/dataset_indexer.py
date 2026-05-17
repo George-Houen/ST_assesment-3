@@ -1,6 +1,7 @@
 from pathlib import Path
 import cv2
 import pandas as pd
+from typing import Any, Callable
 
 from config import RAW_DATA_DIR, SUPPORTED_EXTENSIONS
 
@@ -10,9 +11,9 @@ class DatasetIndexer:
         self.data_dir = data_dir
         self.counter :int = 0
         self.output: pd.DataFrame | None = None
-    def build_dataframe(self, func = None, final = None) -> pd.DataFrame:
+    def build_dataframe(self, func : Callable[[], None] | None = None, final : Callable[[], None] | None = None) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
-        records = []
+        records : list[dict[Any, Any]] = []
 
         for file_path in self.data_dir.rglob("*"):
             if func: func()
