@@ -1,6 +1,7 @@
 from pathlib import Path
 import cv2
 import pandas as pd
+from typing import Any, Callable
 
 from config import RAW_DATA_DIR, SUPPORTED_EXTENSIONS
 
@@ -12,7 +13,7 @@ class DatasetIndexer:
         self.counter :int = 0
         self.output: pd.DataFrame | None = None
 
-    def build_dataframe(self, func = None, final = None) -> pd.DataFrame:
+    def build_dataframe(self, func : Callable[[], None| Any] | None = None, final : Callable[[], None | Any] | None = None) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
         
         records = []

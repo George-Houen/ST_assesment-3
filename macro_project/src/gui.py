@@ -137,7 +137,7 @@ class App(tk.Tk):
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
-    def run_indexing(self):
+    def run_indexing(self) -> None:
         """performs the indexing process, using multiple threads for increased speed"""
 
         print("start indexing")
@@ -152,7 +152,7 @@ class App(tk.Tk):
         thread.start()
         
 
-    def finished_indexing(self):
+    def finished_indexing(self) -> None:
         """finalises the indexing process, storing all the data"""
 
         print("finished indexing")
@@ -162,13 +162,13 @@ class App(tk.Tk):
             raise TypeError (self.data_frame, type(self.data_frame))
         
         print(self.data_frame.columns.to_list())
-        self.class_select.generate_manual(list(self.data_frame["label"]))
+        self.class_select.generate_manual(list(self.data_frame["label"])) #type: ignore
         self.perform_eda_button.grid(column=0, sticky="nsew")
         self.track_eda.grid(column=0, sticky="nsew")
 
         
     
-    def run_eda(self):
+    def run_eda(self) -> None:
         """performs the eda and produces a summary of the results"""
 
         for i in self.eda_output_images.winfo_children():
@@ -193,7 +193,7 @@ class App(tk.Tk):
         )
         thread.start()
     
-    def generate_eda_dropdown(self, title, path):
+    def generate_eda_dropdown(self, title : str, path : Path) -> None):
         """creates a dropdown based on the given eda input"""
 
         drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
