@@ -4,7 +4,7 @@ This project performs EDAs on a macroinvertebrate dataset from Kaggle.com
 It can show the distribution of classes and image sizes, as well as plots of the width and heights, and the heights by class.
 
 # Usage
-You can upload more images to the dataset by using the interface, BUT MAKE SURE THEY ARE .PNG FILES, as the system in its current state does not support any other file formats, and will not work correctly as it does not contain error handling for the upload of other file types.
+You can upload more images to the dataset by using the interface, but if they aren't supported they will be ignored by the analysis.
 To upload files, first ensure you're in the 'manage files' menu, then press 'upload file' and select an image. Next select what class that image belongs to from the dropdown menu, and once that's ready you can press 'upload' and your image will be added to the database.
 
 To view the data analysis, you'll first need to head to the EDA menu, then press 'refresh' to index the dataset. Once that's done, select your desired classes and press 'Perform EDA' to perform the analysis.
