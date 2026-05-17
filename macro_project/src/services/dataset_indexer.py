@@ -6,12 +6,15 @@ from config import RAW_DATA_DIR, SUPPORTED_EXTENSIONS
 
 class DatasetIndexer:
     """Scan the dataset folder and build a tabular image index."""
+
     def __init__(self, data_dir: Path = RAW_DATA_DIR) -> None:
         self.data_dir = data_dir
         self.counter :int = 0
         self.output: pd.DataFrame | None = None
+
     def build_dataframe(self, func = None, final = None) -> pd.DataFrame:
         """Return one row per image with file path, label, and dimensions."""
+        
         records = []
 
         for file_path in self.data_dir.rglob("*"):

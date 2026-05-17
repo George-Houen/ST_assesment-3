@@ -85,7 +85,7 @@ class App(tk.Tk):
         self.class_select = ClassSelect(self.page_eda, padx=3, pady=3, border=2, relief="sunken")
         self.class_select.grid(column=1, row=1, padx=3, pady=3, sticky="ns")
 
-        self.perform_eda_button = Button(self.class_select, command=self.run_eda)
+        self.perform_eda_button = Button(self.class_select, command=self.run_eda, text="Perform EDA")
         self.track_eda_counter = tk.StringVar(value="")
         self.track_eda = Label(self.class_select, textvariable=self.track_eda_counter)
 
