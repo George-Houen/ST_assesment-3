@@ -6,3 +6,7 @@ matplotlib
 seaborn
 tkinter
 joblib
+typing
+pillow
+shutil
+threading
