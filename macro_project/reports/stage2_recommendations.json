@@ -4,15 +4,15 @@ This project does not implement Stage 2 classification or modelling. The recomme
 
 ## Resizing
 
-Readable images vary by 375 pixels in width and 225 pixels in height. Future Stage 2 work should resize images to a consistent input size before modelling.
+Readable images vary by 375 pixels in width and 375 pixels in height. Future Stage 2 work should resize images to a consistent input size before modelling.
 
 ## Normalisation and Colour Processing
 
-The sampled grayscale images have an average intensity of 197.8 and average contrast of 197.8. Future Stage 2 preprocessing should consider normalising pixel values. Grayscale conversion may be useful if colour is not a reliable feature for the macroinvertebrate classes, but this should be compared against colour-based inputs.
+The sampled grayscale images have an average intensity of 193.8 and average contrast of 193.8. Future Stage 2 preprocessing should consider normalising pixel values. Grayscale conversion may be useful if colour is not a reliable feature for the macroinvertebrate classes, but this should be compared against colour-based inputs.
 
 ## Class Imbalance
 
-The largest class has 295 images and the smallest class has 45 images, giving an imbalance ratio of 6.56:1. A stratified train/test split is recommended so every class is represented fairly in evaluation.
+The largest class has 987 images and the smallest class has 9 images, giving an imbalance ratio of 109.67:1. A stratified train/test split is recommended so every class is represented fairly in evaluation.
 
 ## Data Cleaning
 

@@ -1,8 +1,8 @@
 # Class Imbalance Report
 
-- Largest class: **Asellus sp** (295 images)
-- Smallest class: **Elmis sp** (45 images)
-- Imbalance ratio: **6.56:1**
+- Largest class: **Gammarus sp** (987 images)
+- Smallest class: **Leptophlebiidae sp** (9 images)
+- Imbalance ratio: **109.67:1**
 
 ## Interpretation
 

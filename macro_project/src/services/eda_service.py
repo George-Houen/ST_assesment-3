@@ -1,3 +1,14 @@
+
+"""
+*******************************
+Author:
+u3324971 u3334568 
+Assessment 3 
+part 1
+17/ 05/2026
+Programming:
+*******************************
+"""
 from pathlib import Path
 
 import matplotlib

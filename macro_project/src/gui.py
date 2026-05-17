@@ -1,3 +1,15 @@
+
+"""
+*******************************
+Author:
+u3324971 u3334568 
+Assessment 3 
+part 3
+17/ 05/2026
+Programming:
+*******************************
+"""
+
 import tkinter as tk
 import config
 from pathlib import Path
