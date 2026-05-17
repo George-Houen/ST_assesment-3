@@ -16,7 +16,7 @@ from typing import Self, Any, Callable
 from PIL import Image, ImageTk
 from pathlib import Path
 from math import ceil
-from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR #type: ignore. i know ist not used, but if i remove it ill be confused when i try to implement it
+from config import SUPPORTED_EXTENSIONS, RAW_DATA_DIR #type: ignore
 from shutil import copy
 
 class ImageLabel(Label):
