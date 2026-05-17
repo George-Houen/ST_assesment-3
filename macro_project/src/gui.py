@@ -135,7 +135,7 @@ class App(tk.Tk):
         else:
             raise ValueError("page to be opened should be in body and self.pages")
 
-    def run_indexing(self):
+    def run_indexing(self) -> None:
         print("start indexing")
         thread = Thread(
             target=lambda:self.indexer.build_dataframe(
@@ -148,7 +148,7 @@ class App(tk.Tk):
         thread.start()
         
 
-    def finished_indexing(self):
+    def finished_indexing(self) -> None:
         print("finished indexing")
         self.data_frame = self.indexer.output
         if type(self.data_frame) != DataFrame:
@@ -156,13 +156,13 @@ class App(tk.Tk):
             raise TypeError (self.data_frame, type(self.data_frame))
         
         print(self.data_frame.columns.to_list())
-        self.class_select.generate_manual(list(self.data_frame["label"]))
+        self.class_select.generate_manual(list(self.data_frame["label"])) #type: ignore
         self.perform_eda_button.grid(column=0, sticky="nsew")
         self.track_eda.grid(column=0, sticky="nsew")
 
         
     
-    def run_eda(self):
+    def run_eda(self) -> None:
         for i in self.eda_output_images.winfo_children():
             i.destroy()
         if type(self.data_frame) != DataFrame:
@@ -185,7 +185,7 @@ class App(tk.Tk):
         )
         thread.start()
     
-    def generate_eda_dropdown(self, title, path):
+    def generate_eda_dropdown(self, title : str, path : Path) -> None:
         drop_down_frame = DropDown(self.eda_output_images, title).cont_grid(column = 0, sticky = "ew")
         image = ImageLabel(drop_down_frame).grid(column = 0, row = 0, sticky="ew")
         image.set_image(path, **config.EDA_IMAGE_SIZE)
